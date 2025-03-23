@@ -1,0 +1,136 @@
+
+        <html>
+        <head>
+            <title>Poker Playing Styles Analysis</title>
+            <style>
+                body { 
+                    font-family: Arial, sans-serif; 
+                    margin: 20px;
+                    background-color: #f5f5f5;
+                }
+                .container { 
+                    max-width: 1000px; 
+                    margin: auto;
+                    background-color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                }
+                .link { 
+                    margin: 10px 0; 
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 5px;
+                    transition: all 0.3s ease;
+                }
+                .link:hover {
+                    background: #e9ecef;
+                }
+                a { 
+                    color: #2196F3; 
+                    text-decoration: none;
+                    font-weight: 500;
+                }
+                h1 { 
+                    color: #333;
+                    text-align: center;
+                    margin-bottom: 30px;
+                }
+                .summary {
+                    margin-top: 30px;
+                    padding: 20px;
+                    background: #f8f9fa;
+                    border-radius: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Poker Playing Styles Analysis Results</h1>
+                <div class="link"><a href="training_history.html">Model Training History</a></div>
+                <div class="link"><a href="latent_space.html">Playing Styles Distribution (t-SNE)</a></div>
+                <div class="link"><a href="radar_chart.html">Style Characteristics Comparison</a></div>
+                <div class="link"><a href="cluster_distribution.html">Player Distribution Across Styles</a></div>
+                <div class="link"><a href="feature_importance.html">Key Features by Playing Style</a></div>
+                <div class="link"><a href="playing_style_profiles.html">Detailed Style Profiles</a></div>
+                
+        <div class="summary">
+            <h2>Cluster Analysis Summary</h2>
+            <ul>
+        
+            <li>
+                <h3>Cluster 0</h3>
+                <p>Size: 1766 players (10.7%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>PreFlopSPR: -0.726</li><li>FlopSPR: -0.722</li><li>TurnSPR: -0.656</li></ul></li>
+            <li>
+                <h3>Cluster 1</h3>
+                <p>Size: 1449 players (8.8%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>BetRate: 1.597</li><li>VPIP: 0.999</li><li>FoldRate: -0.806</li></ul></li>
+            <li>
+                <h3>Cluster 2</h3>
+                <p>Size: 1776 players (10.8%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>RaiseRate: 0.596</li><li>PFR: 0.522</li><li>PreFlopSPR: 0.519</li></ul></li>
+            <li>
+                <h3>Cluster 3</h3>
+                <p>Size: 1142 players (6.9%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>TurnSPR: 1.719</li><li>RiverSPR: 1.655</li><li>FlopSPR: 1.637</li></ul></li>
+            <li>
+                <h3>Cluster 4</h3>
+                <p>Size: 1442 players (8.7%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>TurnBetAvg: 0.847</li><li>FlopBetAvg: 0.751</li><li>PreFlopBetAvg: 0.747</li></ul></li>
+            <li>
+                <h3>Cluster 5</h3>
+                <p>Size: 1730 players (10.5%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>FoldRate: 0.689</li><li>VPIP: -0.681</li><li>PFR: -0.579</li></ul></li>
+            <li>
+                <h3>Cluster 6</h3>
+                <p>Size: 1173 players (7.1%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>FoldRate: 1.834</li><li>VPIP: -1.410</li><li>AvgActionsPerHand: -1.339</li></ul></li>
+            <li>
+                <h3>Cluster 7</h3>
+                <p>Size: 901 players (5.5%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>PreFlopSPR: 2.066</li><li>FlopSPR: 1.935</li><li>AvgActionsPerHand: 1.732</li></ul></li>
+            <li>
+                <h3>Cluster 8</h3>
+                <p>Size: 1751 players (10.6%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>CallRate: -0.782</li><li>RaiseRate: 0.747</li><li>AvgActionsPerHand: -0.670</li></ul></li>
+            <li>
+                <h3>Cluster 9</h3>
+                <p>Size: 919 players (5.6%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>PFR: 2.169</li><li>RaiseRate: 1.929</li><li>FoldRate: -0.977</li></ul></li>
+            <li>
+                <h3>Cluster 10</h3>
+                <p>Size: 852 players (5.2%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>PreFlopBetAvg: 2.638</li><li>FlopBetAvg: 2.434</li><li>TurnBetAvg: 2.431</li></ul></li>
+            <li>
+                <h3>Cluster 11</h3>
+                <p>Size: 1589 players (9.6%)</p>
+                <p>Key characteristics:</p>
+                <ul>
+            <li>CallRate: 1.454</li><li>CheckRate: 1.274</li><li>AvgActionsPerHand: 1.214</li></ul></li></ul></div>
+            </div>
+        </body>
+        </html>
+        
