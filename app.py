@@ -164,11 +164,7 @@ HTML_TEMPLATE = '''
             <img src="/plot_allin/training_history.png" alt="Динамика обучения All-in">
         </div>
 
-        <div class="image-container">
-            <h2>График ошибок предсказания All-in</h2>
-            <img src="/plot_allin/error_dynamics.png" alt="График ошибок All-in">
         </div>
-    </div>
 
     <script>
         function showTab(tabId) {
