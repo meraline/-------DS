@@ -1,6 +1,7 @@
 """
 train_main.py - Главный файл для запуска процесса обучения модели RWKV
 """
+import sys
 from train_process import train_poker_model
 
 if __name__ == "__main__":
