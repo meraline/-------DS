@@ -448,17 +448,25 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
     bet_size_mask = df['Action'].isin(['Bet', 'Raise'])
     if bet_size_mask.any():
         bet_df = df[bet_size_mask].copy()
-        # Simple bet size categorization
-        bet_df['BetSizeCategory'] = pd.cut(bet_df['Bet'], bins=[-np.inf, 0.25, 0.5, 0.75, np.inf], labels=['Small', 'Medium', 'Large', 'Huge'])
+        # Категоризация ставок относительно банка
+        bet_df['BetToPot'] = bet_df['Bet'] / bet_df['Pot']
+        conditions = [
+            (bet_df['BetToPot'] <= 0.33),
+            (bet_df['BetToPot'] <= 0.66) & (bet_df['BetToPot'] > 0.33),
+            (bet_df['BetToPot'] <= 1.0) & (bet_df['BetToPot'] > 0.66),
+            (bet_df['BetToPot'] > 1.0)
+        ]
+        choices = ['Small', 'Medium', 'Large', 'Huge']
+        bet_df['BetSizeCategory'] = np.select(conditions, choices, default='Medium')
 
         if all_targets:
             # Получаем истинные метки размеров ставок
             y_true_sizes = bet_df['BetSizeCategory'].values
-            
+
             # Предсказываем размеры ставок для тех же строк
             bet_indices = df[bet_size_mask].index
             y_pred_sizes = ['Small'] * len(y_true_sizes)  # Дефолтное значение
-            
+
             for i, prob in enumerate(probas):
                 if i in bet_indices:
                     bet_idx = list(bet_indices).index(i)
