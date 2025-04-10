@@ -298,7 +298,8 @@ def prepare_test_data(file_path, artifacts, max_rows=None, skip_rows=0):
     result = {
         'X_test': X_test_float32,
         'feature_columns': feature_columns,
-        'has_targets': has_targets
+        'has_targets': has_targets,
+        'df': df #add df to result
     }
 
     # Если есть метки, добавляем их
@@ -404,10 +405,9 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir):
         print(text_report)
 
     # Дополнительные визуализации для модели размеров ставок
+    df = test_data['df'] # Accessing df from test_data
     if 'size' in output_dir:
         # Визуализация распределения размеров ставок
-        df = pd.read_csv(args.test) # Accessing df here since it's not available in the original scope
-
         sizes_dist_path = os.path.join(output_dir, "bet_sizes_distribution.png")
         plt.figure(figsize=(12, 6))
         sns.histplot(data=df[df['Action'].isin(['Bet', 'Raise'])], x='Bet', bins=50)
@@ -441,6 +441,42 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir):
         plt.savefig(pot_sizes_path)
         plt.close()
         print(f"Размеры ставок относительно банка сохранены в {pot_sizes_path}")
+
+
+    # Добавляем матрицу ошибок для размеров ставок
+    bet_size_mask = df['Action'].isin(['Bet', 'Raise'])
+    if bet_size_mask.any():
+        bet_df = df[bet_size_mask].copy()
+        # Simple bet size categorization
+        bet_df['BetSizeCategory'] = pd.cut(bet_df['Bet'], bins=[-np.inf, 0.25, 0.5, 0.75, np.inf], labels=['Small', 'Medium', 'Large', 'Huge'])
+
+        if all_targets:
+            y_true_sizes = bet_df['BetSizeCategory']
+            y_pred_sizes = pd.cut(probas.argmax(axis=1), bins=[-np.inf, 0.25, 0.5, 0.75, np.inf], labels=['Small', 'Medium', 'Large', 'Huge'])
+
+
+            plt.figure(figsize=(10, 8))
+            sns.heatmap(confusion_matrix(y_true_sizes, y_pred_sizes),
+                       annot=True, fmt='d',
+                       xticklabels=np.unique(y_true_sizes),
+                       yticklabels=np.unique(y_true_sizes))
+            plt.title('Матрица ошибок для размеров ставок')
+            plt.xlabel('Предсказанные значения')
+            plt.ylabel('Истинные значения')
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
+            plt.close()
+
+            # Сохраняем отчет о классификации размеров ставок
+            with open(os.path.join(output_dir, 'bet_size_classification_report.txt'), 'w') as f:
+                f.write(classification_report(y_true_sizes, y_pred_sizes))
+
+    # Displaying all features in a table
+    if all_targets:
+        feature_table_path = os.path.join(output_dir, 'feature_table.csv')
+        test_data['df'][test_data['df'].columns].to_csv(feature_table_path, index=False)
+        print(f"Таблица признаков сохранена в {feature_table_path}")
+
 
     return results
 
