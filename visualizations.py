@@ -9,8 +9,6 @@ import pandas as pd
 from sklearn.metrics import classification_report, confusion_matrix
 
 def visualize_data_distribution(y_train, y_val, action_mapping, timestamp=None):
-    if timestamp is None:
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     """
     Визуализация распределения классов в обучающей и валидационной выборках
     
@@ -18,10 +16,13 @@ def visualize_data_distribution(y_train, y_val, action_mapping, timestamp=None):
         y_train: Метки обучающей выборки
         y_val: Метки валидационной выборки
         action_mapping: Отображение действий в числовые метки
+        timestamp: Временная метка для сохранения файла
         
     Returns:
         matplotlib.figure.Figure: Фигура с визуализацией
     """
+    if timestamp is None:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     # Инвертируем mapping для отображения имен классов
     action_names = {v: k for k, v in action_mapping.items()}
     
