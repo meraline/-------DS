@@ -8,8 +8,8 @@ if __name__ == "__main__":
     
     # Аргументы командной строки с установленными значениями по умолчанию
     parser = argparse.ArgumentParser(description="Обучение RWKV модели на покерных данных")
-    parser.add_argument("--file", type=str, default="/home/tofan/data1/csv/split_data/buyin_type_MTT_1000.csv", help="Путь к CSV-файлу с данными")
-    parser.add_argument("--output", type=str, default="/home/tofan/Документы/GitLab_grace/ДИПЛОМ DS/evaluation_results/model_dir", help="Директория для сохранения результатов")
+    parser.add_argument("--file", type=str, default="./data/combined_data_all_processed_20250223_181119.csv", help="Путь к CSV-файлу с данными")
+    parser.add_argument("--output", type=str, default="./model_dir", help="Директория для сохранения результатов")
     parser.add_argument("--hidden_dim", type=int, default=192, help="Размерность скрытого состояния")
     parser.add_argument("--num_layers", type=int, default=6, help="Количество слоев RWKV")
     parser.add_argument("--epochs", type=int, default=10, help="Количество эпох обучения")
