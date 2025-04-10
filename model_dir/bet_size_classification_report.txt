@@ -1,12 +1,12 @@
               precision    recall  f1-score   support
 
-       large       0.18      0.13      0.15        15
-      medium       0.27      0.23      0.25        26
-medium_large       0.12      0.06      0.08        18
-       small       0.00      0.00      0.00        16
-  very_large       0.00      0.00      0.00        49
-  very_small       0.04      0.50      0.08         6
+       large       0.37      0.96      0.54      2071
+      medium       0.03      0.00      0.00      1031
+medium_large       0.13      0.55      0.21       753
+       small       0.00      0.00      0.00      1295
+  very_large       0.00      0.00      0.00      3107
+  very_small       1.00      0.01      0.01       487
 
-    accuracy                           0.09       130
-   macro avg       0.10      0.15      0.09       130
-weighted avg       0.09      0.09      0.08       130
+    accuracy                           0.28      8744
+   macro avg       0.25      0.25      0.13      8744
+weighted avg       0.16      0.28      0.15      8744
