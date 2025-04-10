@@ -624,7 +624,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.savefig(os.path.join(output_dir + '_allin', 'bet_size_distribution.png'))
             plt.close()
 
-                print("\nПримеры all-in ситуаций:")
+            print("\nПримеры all-in ситуаций:")
             allin_examples = df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head()
             print(allin_examples)
 
@@ -636,8 +636,8 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.savefig(os.path.join(output_dir + '_allin', 'allin_stack_distribution.png'))
             plt.close()
 
-                # Перемещаем файлы из model_dir в model_dir_allin
-                import shutil
+            # Перемещаем файлы из model_dir в model_dir_allin
+            import shutil
                 for file in ['allin_distribution.png', 'allin_stack_distribution.png']:
                     src = os.path.join(output_dir, file)
                     dst = os.path.join(output_dir + '_allin', file)
