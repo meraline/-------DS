@@ -320,7 +320,9 @@ def visualize_tsne(features, predictions, true_labels=None, output_path=None, ma
     if output_path:
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         base, ext = os.path.splitext(output_path)
-        output_path = f"{base}_{timestamp}{ext}", раскрашенную по предсказанным (и опционально истинным) меткам
+        output_path = f"{base}_{timestamp}{ext}"
+    """
+    Создает t-SNE визуализацию для признаков, раскрашенную по предсказанным (и опционально истинным) меткам
     
     Args:
         features: Признаки для визуализации
