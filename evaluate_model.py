@@ -457,16 +457,30 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir):
             
             # Предсказываем размеры ставок для тех же строк
             bet_indices = df[bet_size_mask].index
-            y_pred_sizes = []
+            y_pred_sizes = ['Small'] * len(y_true_sizes)  # Дефолтное значение
             
             for i, prob in enumerate(probas):
                 if i in bet_indices:
+                    bet_idx = list(bet_indices).index(i)
                     if prob[0] > 0.75:
-                        y_pred_sizes.append('Large')
+                        y_pred_sizes[bet_idx] = 'Large'
                     elif prob[0] > 0.5:
-                        y_pred_sizes.append('Medium')
+                        y_pred_sizes[bet_idx] = 'Medium'
                     else:
-                        y_pred_sizes.append('Small')
+                        y_pred_sizes[bet_idx] = 'Small'
+
+            # Создаем матрицу ошибок для размеров ставок
+            plt.figure(figsize=(10, 8))
+            cm_sizes = confusion_matrix(y_true_sizes, y_pred_sizes, labels=['Small', 'Medium', 'Large', 'Huge'])
+            sns.heatmap(cm_sizes, annot=True, fmt='d',
+                       xticklabels=['Small', 'Medium', 'Large', 'Huge'],
+                       yticklabels=['Small', 'Medium', 'Large', 'Huge'])
+            plt.title('Матрица ошибок для размеров ставок')
+            plt.xlabel('Предсказанные значения')
+            plt.ylabel('Истинные значения')
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
+            plt.close()
 
 
             plt.figure(figsize=(10, 8))
