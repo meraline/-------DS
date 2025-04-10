@@ -77,6 +77,11 @@ HTML_TEMPLATE = '''
     </div>
 
     <div id="actions" class="tab tab-active">
+        <div class="feature-table">
+            <h2>Top 10 Important Features (Actions Model)</h2>
+            <iframe src="/plot/feature_table.html" width="100%" height="300px" frameborder="0"></iframe>
+        </div>
+        
         <div class="image-container">
             <h2>Матрица ошибок</h2>
             <img src="/plot/confusion_matrix.png?v={{timestamp}}" alt="Матрица ошибок">
@@ -99,6 +104,11 @@ HTML_TEMPLATE = '''
     </div>
 
     <div id="sizes" class="tab">
+        <div class="feature-table">
+            <h2>Top 10 Important Features (Bet Sizes Model)</h2>
+            <iframe src="/plot/feature_table_size.html" width="100%" height="300px" frameborder="0"></iframe>
+        </div>
+        
         <div class="image-container">
             <h2>Матрица ошибок размеров ставок</h2>
             <img src="/plot/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок">
@@ -128,9 +138,19 @@ HTML_TEMPLATE = '''
     </div>
 
     <div id="allin" class="tab">
+        <div class="feature-table">
+            <h2>Top 10 Important Features (All-in Model)</h2>
+            <iframe src="/plot/feature_table_allin.html" width="100%" height="300px" frameborder="0"></iframe>
+        </div>
+
         <div class="image-container">
             <h2>ROC-кривая для All-in</h2>
             <img src="/plot_allin/allin_roc_curve.png" alt="ROC-кривая All-in">
+        </div>
+
+        <div class="image-container">
+            <h2>График ошибок предсказания All-in</h2>
+            <img src="/plot/error_dynamics_allin.png" alt="График ошибок All-in">
         </div>
 
         <div class="image-container">
@@ -214,6 +234,21 @@ def serve_plot_allin(filename):
         response.headers['Expires'] = '0'
         return response
     return "File not found", 404
+
+@app.route('/plot/feature_table.html')
+def serve_feature_table():
+    df = pd.read_csv('model_dir/feature_table.csv').head(10)
+    return df.to_html(classes='table table-striped', index=False)
+
+@app.route('/plot/feature_table_size.html')
+def serve_feature_table_size():
+    df = pd.read_csv('model_dir_size/feature_table.csv').head(10)
+    return df.to_html(classes='table table-striped', index=False)
+
+@app.route('/plot/feature_table_allin.html')
+def serve_feature_table_allin():
+    df = pd.read_csv('model_dir_allin/feature_table.csv').head(10)
+    return df.to_html(classes='table table-striped', index=False)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
