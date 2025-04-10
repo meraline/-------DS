@@ -1,0 +1,16 @@
+// RWKV Architecture
+digraph {
+	rankdir=TB size="11,8"
+	data [label="Входные данные покерного турнира
+Позиция, Стек, SPR, История действий..." fillcolor=lightblue shape=box style=filled]
+	time [label="Time-Mixing блок
+Анализ истории действий" fillcolor=lightgreen shape=box style=filled]
+	channel [label="Channel-Mixing блок
+Анализ покерных признаков" fillcolor=lightyellow shape=box style=filled]
+	output [label="Выходные вероятности
+Fold, Check, Call, Bet, Raise" fillcolor=lightpink shape=box style=filled]
+	data -> time [label="История"]
+	data -> channel [label="Признаки"]
+	time -> channel [label="Временной контекст"]
+	channel -> output [label="Интегрированная информация"]
+}

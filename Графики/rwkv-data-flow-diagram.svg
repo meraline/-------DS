@@ -1,0 +1,152 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Стили -->
+  <style>
+    .block { stroke: #333; stroke-width: 2; }
+    .blue-block { fill: #D6EAF8; }
+    .green-block { fill: #D5F5E3; }
+    .yellow-block { fill: #FCF3CF; }
+    .pink-block { fill: #FADBD8; }
+    .data-bubble { fill: #E8F8F5; stroke: #148F77; stroke-width: 1.5; }
+    .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    .text { font-family: Arial, sans-serif; }
+    .title { font-size: 16px; font-weight: bold; }
+    .subtitle { font-size: 12px; font-style: italic; }
+    .data-text { font-size: 10px; }
+    .arrow-label { font-size: 12px; fill: #333; }
+    .highlight { fill: #F8C471; }
+  </style>
+
+  <!-- Маркер для стрелок -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Заголовок -->
+  <text x="400" y="30" class="text title" text-anchor="middle">Протекание данных через архитектуру RWKV для анализа покерных турниров</text>
+
+  <!-- Входные данные -->
+  <rect x="250" y="50" width="300" height="70" rx="5" class="block blue-block" />
+  <text x="400" y="75" class="text title" text-anchor="middle">Входные данные покерного турнира</text>
+  <text x="400" y="95" class="text subtitle" text-anchor="middle">Признаки и история действий</text>
+
+  <!-- Пузырь с примером входных данных -->
+  <rect x="100" y="60" width="130" height="90" rx="10" class="data-bubble" />
+  <text x="165" y="75" class="text data-text" text-anchor="middle">ПРИМЕР ВХОДНЫХ ДАННЫХ:</text>
+  <text x="165" y="90" class="text data-text" text-anchor="middle">Position: MP1</text>
+  <text x="165" y="105" class="text data-text" text-anchor="middle">Stack: 56BB, SPR: 11.9</text>
+  <text x="165" y="120" class="text data-text" text-anchor="middle">VPIP: 27.3, PFR: 21.1</text>
+  <text x="165" y="135" class="text data-text" text-anchor="middle">История: "CallFoldRaise"</text>
+  <line x1="230" y1="100" x2="250" y2="85" stroke="#148F77" stroke-width="1.5" stroke-dasharray="3,3" />
+
+  <!-- Time-Mixing блок -->
+  <rect x="150" y="180" width="200" height="80" rx="5" class="block green-block" />
+  <text x="250" y="205" class="text title" text-anchor="middle">Time-Mixing блок</text>
+  <text x="250" y="225" class="text subtitle" text-anchor="middle">Анализ истории действий</text>
+
+  <!-- Channel-Mixing блок -->
+  <rect x="450" y="180" width="200" height="80" rx="5" class="block yellow-block" />
+  <text x="550" y="205" class="text title" text-anchor="middle">Channel-Mixing блок</text>
+  <text x="550" y="225" class="text subtitle" text-anchor="middle">Анализ покерных признаков</text>
+
+  <!-- Выходные вероятности -->
+  <rect x="250" y="350" width="300" height="70" rx="5" class="block pink-block" />
+  <text x="400" y="375" class="text title" text-anchor="middle">Выходные вероятности</text>
+  <text x="400" y="395" class="text subtitle" text-anchor="middle">Fold, Check, Call, Bet, Raise</text>
+
+  <!-- Стрелки -->
+  <path d="M 350 120 L 280 180" class="arrow" />
+  <path d="M 450 120 L 520 180" class="arrow" />
+  <path d="M 250 260 L 350 260 L 450 260" class="arrow" />
+  <path d="M 400 260 L 400 350" class="arrow" />
+
+  <!-- Подписи к стрелкам -->
+  <text x="290" y="150" class="text arrow-label" text-anchor="middle">История</text>
+  <text x="510" y="150" class="text arrow-label" text-anchor="middle">Признаки</text>
+  <text x="350" y="280" class="text arrow-label" text-anchor="middle">Временной контекст</text>
+  <text x="430" y="320" class="text arrow-label" text-anchor="middle">Интегрированная информация</text>
+
+  <!-- Внутреннее представление Time-Mixing блока -->
+  <rect x="20" y="300" width="220" height="180" rx="5" stroke="#333" stroke-width="1.5" fill="#f8f8f8" stroke-dasharray="5,3" />
+  <text x="130" y="315" class="text subtitle" text-anchor="middle">Внутренняя обработка Time-Mixing</text>
+  
+  <!-- Компоненты Time-Mixing блока -->
+  <rect x="40" y="330" width="50" height="30" rx="3" class="highlight" />
+  <text x="65" y="350" class="text data-text" text-anchor="middle">R (рецепт.)</text>
+  
+  <rect x="105" y="330" width="50" height="30" rx="3" class="highlight" />
+  <text x="130" y="350" class="text data-text" text-anchor="middle">K (ключ)</text>
+  
+  <rect x="170" y="330" width="50" height="30" rx="3" class="highlight" />
+  <text x="195" y="350" class="text data-text" text-anchor="middle">V (значение)</text>
+  
+  <rect x="70" y="380" width="120" height="40" rx="3" fill="#FADBD8" />
+  <text x="130" y="405" class="text data-text" text-anchor="middle">WKV механизм</text>
+  
+  <path d="M 65 360 L 65 380 L 130 380" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" fill="none" />
+  <path d="M 130 360 L 130 380" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" fill="none" />
+  <path d="M 195 360 L 195 380 L 130 380" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" fill="none" />
+  
+  <rect x="70" y="440" width="120" height="25" rx="3" fill="#D5F5E3" />
+  <text x="130" y="457" class="text data-text" text-anchor="middle">Выход (Out)</text>
+  
+  <path d="M 130 420 L 130 440" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" fill="none" />
+  
+  <!-- Пузырь с примером обработки историй -->
+  <rect x="30" y="480" width="200" height="80" rx="10" class="data-bubble" />
+  <text x="130" y="495" class="text data-text" text-anchor="middle">ОБРАБОТКА ИСТОРИИ:</text>
+  <text x="130" y="510" class="text data-text" text-anchor="middle">"CallFoldRaise" → важность Raise</text>
+  <text x="130" y="525" class="text data-text" text-anchor="middle">Взвешивание последних действий</text>
+  <text x="130" y="540" class="text data-text" text-anchor="middle">Выявлена тенденция к агрессии</text>
+  <line x1="130" y1="465" x2="130" y2="480" stroke="#148F77" stroke-width="1.5" stroke-dasharray="3,3" />
+  <line x1="220" y1="450" x2="250" y2="260" stroke="#148F77" stroke-width="1.5" stroke-dasharray="3,3" />
+  
+  <!-- Внутреннее представление Channel-Mixing блока -->
+  <rect x="560" y="300" width="220" height="180" rx="5" stroke="#333" stroke-width="1.5" fill="#f8f8f8" stroke-dasharray="5,3" />
+  <text x="670" y="315" class="text subtitle" text-anchor="middle">Внутренняя обработка Channel-Mixing</text>
+  
+  <!-- Компоненты Channel-Mixing блока -->
+  <rect x="580" y="330" width="50" height="30" rx="3" class="highlight" />
+  <text x="605" y="350" class="text data-text" text-anchor="middle">R' (регул.)</text>
+  
+  <rect x="710" y="330" width="50" height="30" rx="3" class="highlight" />
+  <text x="735" y="350" class="text data-text" text-anchor="middle">V' (признаки)</text>
+  
+  <circle cx="670" cy="360" r="15" fill="#ffffff" stroke="#333" />
+  <text x="670" y="364" class="text" text-anchor="middle">×</text>
+  
+  <path d="M 630 345 L 655 360" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" fill="none" />
+  <path d="M 710 345 L 685 360" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" fill="none" />
+  
+  <rect x="620" y="380" width="100" height="25" rx="3" fill="#FCF3CF" />
+  <text x="670" y="397" class="text data-text" text-anchor="middle">Интеграция</text>
+  
+  <path d="M 670 375 L 670 380" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" fill="none" />
+  
+  <!-- Пузырь с примером обработки признаков -->
+  <rect x="580" y="480" width="180" height="80" rx="10" class="data-bubble" />
+  <text x="670" y="495" class="text data-text" text-anchor="middle">ОБРАБОТКА ПРИЗНАКОВ:</text>
+  <text x="670" y="510" class="text data-text" text-anchor="middle">SPR=11.9 + VPIP=27.3 →</text>
+  <text x="670" y="525" class="text data-text" text-anchor="middle">Выявлена зависимость между</text>
+  <text x="670" y="540" class="text data-text" text-anchor="middle">SPR и агрессивным стилем</text>
+  <line x1="670" y1="405" x2="670" y2="480" stroke="#148F77" stroke-width="1.5" stroke-dasharray="3,3" />
+  <line x1="580" y1="425" x2="550" y2="260" stroke="#148F77" stroke-width="1.5" stroke-dasharray="3,3" />
+  
+  <!-- Пузырь с выходными вероятностями -->
+  <rect x="510" y="350" width="130" height="110" rx="10" class="data-bubble" />
+  <text x="575" y="365" class="text data-text" text-anchor="middle">РЕЗУЛЬТАТ АНАЛИЗА:</text>
+  <text x="575" y="382" class="text data-text" text-anchor="middle">• Fold: 15%</text>
+  <text x="575" y="397" class="text data-text" text-anchor="middle">• Check: 5%</text>
+  <text x="575" y="412" class="text data-text" text-anchor="middle">• Call: 25%</text>
+  <text x="575" y="427" class="text data-text" font-weight="bold" text-anchor="middle">• Bet: 40% ←</text>
+  <text x="575" y="442" class="text data-text" text-anchor="middle">• Raise: 15%</text>
+  <line x1="510" y1="385" x2="495" y2="385" stroke="#148F77" stroke-width="1.5" stroke-dasharray="3,3" />
+  
+  <!-- Итоговое пояснение -->
+  <rect x="100" y="550" width="600" height="40" rx="5" fill="#F2F3F4" stroke="#85929E" stroke-width="1" />
+  <text x="400" y="575" class="text subtitle" text-anchor="middle">
+    В данном примере, на основе SPR=11.9 и истории "CallFoldRaise", модель RWKV определила Bet (40%)
+    как оптимальное действие благодаря интеграции временного и признакового контекста
+  </text>
+</svg>
