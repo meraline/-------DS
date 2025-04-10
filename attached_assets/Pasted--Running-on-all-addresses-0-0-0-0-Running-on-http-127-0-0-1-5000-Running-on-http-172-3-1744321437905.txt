@@ -1,0 +1,51 @@
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.128.28:5000
+172.31.128.28 - - [10/Apr/2025 21:43:33] "GET / HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:33] "GET /plot/class_distribution.png HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:33] "GET /plot/confusion_matrix.png HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:33] "GET /plot/prediction_confidence.png HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:33] "GET /plot_size/bet_size_distribution.png HTTP/1.1" 200 -
+[2025-04-10 21:43:34,100] ERROR in app: Exception on /plot_size/bet_size_confusion_matrix.png [GET]
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/app.py", line 157, in serve_plot_size
+    latest_file = get_latest_file(filename.split('_')[0], 'model_dir_size')
+                  ^^^^^^^^^^^^^^^
+NameError: name 'get_latest_file' is not defined
+172.31.128.28 - - [10/Apr/2025 21:43:34] "GET /plot_size/bet_size_confusion_matrix.png HTTP/1.1" 500 -
+[2025-04-10 21:43:34,275] ERROR in app: Exception on /plot_size/class_distribution.png [GET]
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/app.py", line 157, in serve_plot_size
+    latest_file = get_latest_file(filename.split('_')[0], 'model_dir_size')
+                  ^^^^^^^^^^^^^^^
+NameError: name 'get_latest_file' is not defined
+172.31.128.28 - - [10/Apr/2025 21:43:34] "GET /plot_size/class_distribution.png HTTP/1.1" 500 -
+172.31.128.28 - - [10/Apr/2025 21:43:34] "GET /plot/tsne_visualization.png HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:34] "GET /plot_allin/allin_roc_curve.png HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:34] "GET /plot_allin/allin_distribution.png HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:34] "GET /plot_allin/allin_stack_distribution.png HTTP/1.1" 200 -
+172.31.128.28 - - [10/Apr/2025 21:43:34] "GET /plot_allin/bet_size_distribution.png HTTP/1.1" 200 -
