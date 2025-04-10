@@ -580,9 +580,16 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
         # Displaying all features in a table
         if all_targets:
+            # Save feature tables for all model types
             feature_table_path = os.path.join(output_dir, 'feature_table.csv')
+            feature_table_size_path = os.path.join(output_dir.replace('model_dir', 'model_dir_size'), 'feature_table.csv')
+            feature_table_allin_path = os.path.join(output_dir.replace('model_dir', 'model_dir_allin'), 'feature_table.csv')
+            
+            # Save the same feature table for all models
             test_data['df'][test_data['df'].columns].to_csv(feature_table_path, index=False)
-            print(f"Таблица признаков сохранена в {feature_table_path}")
+            test_data['df'][test_data['df'].columns].to_csv(feature_table_size_path, index=False)
+            test_data['df'][test_data['df'].columns].to_csv(feature_table_allin_path, index=False)
+            print(f"Таблицы признаков сохранены в {feature_table_path}, {feature_table_size_path}, {feature_table_allin_path}")
 
 
     return results

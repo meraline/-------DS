@@ -150,11 +150,6 @@ HTML_TEMPLATE = '''
         </div>
 
         <div class="image-container">
-            <h2>График ошибок предсказания All-in</h2>
-            <img src="/plot/error_dynamics_allin.png" alt="График ошибок All-in">
-        </div>
-
-        <div class="image-container">
             <h2>Распределение All-in</h2>
             <img src="/plot_allin/allin_distribution.png" alt="Распределение All-in">
         </div>
