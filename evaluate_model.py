@@ -524,8 +524,13 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
             # Визуализация ROC-кривой для all-in предсказаний
             if 'allin' in output_dir:
-                from sklearn.metrics import roc_curve, auc
-                fpr, tpr, _ = roc_curve(y_true_sizes, y_pred_sizes)
+                df_allin = test_data['df'].copy()
+                y_true_allin = (df_allin['Allin'] == 1).astype(int)
+                
+                # Получаем вероятности для all-in класса
+                probs = results['probabilities'][:, 1] if len(probs.shape) > 1 else probs
+                
+                fpr, tpr, _ = roc_curve(y_true_allin, probs)
                 roc_auc = auc(fpr, tpr)
 
                 plt.figure(figsize=(10, 8))
@@ -539,6 +544,12 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.legend(loc="lower right")
                 plt.savefig(os.path.join(output_dir, 'allin_roc_curve.png'))
                 plt.close()
+
+                # Анализ распределения all-in
+                print("\nСтатистика по all-in решениям:")
+                print(df_allin['Allin'].value_counts())
+                print("\nПримеры all-in ситуаций:")
+                print(df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head())
 
                 # Анализ ситуаций с all-in
                 allin_df = df[df['Allin'] == 1].copy()
