@@ -466,7 +466,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
     if len(df_bets) > 0:
         # Категоризация ставок относительно банка (в процентах)
         df_bets['BetToPot'] = (df_bets['Bet'] / df_bets['Pot']) * 100
-        
+
         # Создаем категории ставок
         conditions = [
             (df_bets['BetToPot'] < 26),
@@ -478,7 +478,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
         ]
         choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
         df_bets['BetSizeCategory'] = np.select(conditions, choices, default='medium')
-        
+
         # Выводим статистику по категориям
         print("\nРаспределение размеров ставок по категориям:")
         size_stats = df_bets['BetSizeCategory'].value_counts()
@@ -653,11 +653,11 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                     shutil.move(src, dst)
                     print(f"Перемещен файл {file} в папку {output_dir}_allin")
 
-    # Displaying all features in a table
-    if all_targets:
-        feature_table_path = os.path.join(output_dir, 'feature_table.csv')
-        test_data['df'][test_data['df'].columns].to_csv(feature_table_path, index=False)
-        print(f"Таблица признаков сохранена в {feature_table_path}")
+        # Displaying all features in a table
+        if all_targets:
+            feature_table_path = os.path.join(output_dir, 'feature_table.csv')
+            test_data['df'][test_data['df'].columns].to_csv(feature_table_path, index=False)
+            print(f"Таблица признаков сохранена в {feature_table_path}")
 
 
     return results
@@ -670,6 +670,7 @@ def main():
     parser.add_argument('--test', type=str, default='/home/tofan/data1/csv/split_data/buyin_type_MTT_250.csv', required=False, help='Путь к файлу с тестовыми данными')
     parser.add_argument('--output', type=str, default='/home/tofan/Документы/GitLab_grace/ДИПЛОМ DS/evaluation_results', help='Путь к директории для сохранения результатов')
     parser.add_argument('--max_rows', type=int, default=150000, help='Максимальное количество строк для загрузки')
+    <new_str>
     parser.add_argument('--skip_rows', type=int, default=0, help='Количество строк данных для пропуска после заголовка')
     parser.add_argument('--tsne_samples', type=int, default=15000, help='Максимальное количество образцов для t-SNE визуализации')
     args = parser.parse_args()
