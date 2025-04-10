@@ -132,21 +132,8 @@ HTML_TEMPLATE = '''
 def index():
     return render_template_string(HTML_TEMPLATE)
 
-def get_latest_file(pattern, directory):
-    """Получить самый свежий файл по шаблону"""
-    files = [f for f in os.listdir(directory) if pattern in f]
-    if not files:
-        return None
-    files.sort(key=lambda x: os.path.getmtime(os.path.join(directory, x)), reverse=True)
-    return files[0]
-
 @app.route('/plot/<filename>')
 def serve_plot(filename):
-    # Если в имени файла есть временная метка, ищем последний
-    if any(pattern in filename for pattern in ['confusion_matrix', 'class_distribution', 'tsne_visualization']):
-        latest_file = get_latest_file(filename.split('_')[0], 'model_dir')
-        if latest_file:
-            filename = latest_file
 
     plot_path = os.path.join('model_dir', filename)
     if os.path.exists(plot_path):
