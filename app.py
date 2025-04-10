@@ -150,8 +150,10 @@ def serve_plot(filename):
 
     plot_path = os.path.join('model_dir', filename)
     if os.path.exists(plot_path):
-        response = send_file(plot_path)
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response = send_file(plot_path, mimetype='image/png')
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
         return response
     return "File not found", 404
 
@@ -165,8 +167,10 @@ def serve_plot_size(filename):
 
     plot_path = os.path.join('model_dir_size', filename)  # Changed path to model_dir
     if os.path.exists(plot_path):
-        response = send_file(plot_path)
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response = send_file(plot_path, mimetype='image/png')
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
         return response
     return "File not found", 404
 
@@ -174,8 +178,10 @@ def serve_plot_size(filename):
 def serve_plot_allin(filename):
     plot_path = os.path.join('model_dir_allin', filename)  # Changed path to model_dir_allin
     if os.path.exists(plot_path):
-        response = send_file(plot_path)
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response = send_file(plot_path, mimetype='image/png')
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
         return response
     return "File not found", 404
 
