@@ -47,3 +47,13 @@ if __name__ == "__main__":
     print(f"  - Скейлер для нормализации: {result['scaler_path']}")
     print(f"  - Метаданные модели: {result['model_info_path']}")
     print("=" * 60)
+    
+    # Запуск оценки модели
+    print("\nЗапуск оценки модели...")
+    from evaluate_model import main as evaluate_main
+    evaluate_main([
+        "--model_dir", args.output,
+        "--test", args.file,  # Используем тот же файл для тестирования
+        "--output", args.output,  # Сохраняем результаты в ту же директорию
+        "--max_rows", str(min(500000, args.max_rows))  # Ограничиваем размер тестовой выборки
+    ])
