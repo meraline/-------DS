@@ -430,10 +430,9 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             (bet_df['BetToPot'] >= 44) & (bet_df['BetToPot'] < 58),
             (bet_df['BetToPot'] >= 58) & (bet_df['BetToPot'] < 78),
             (bet_df['BetToPot'] >= 78) & (bet_df['BetToPot'] < 92),
-            (bet_df['BetToPot'] >= 92) & (bet_df['BetToPot'] < 200),
-            (bet_df['BetToPot'] >= 200) | (bet_df['Allin'] == 1)
+            (bet_df['BetToPot'] >= 92)
         ]
-        choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large', 'all-in']
+        choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
         bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
 
         # Plot distribution
@@ -474,10 +473,9 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             (bet_df['BetToPot'] >= 44) & (bet_df['BetToPot'] < 58),
             (bet_df['BetToPot'] >= 58) & (bet_df['BetToPot'] < 78),
             (bet_df['BetToPot'] >= 78) & (bet_df['BetToPot'] < 92),
-            (bet_df['BetToPot'] >= 92) & (bet_df['BetToPot'] < 200),
-            (bet_df['BetToPot'] >= 200) | (bet_df['Allin'] == 1)
+            (bet_df['BetToPot'] >= 92)
         ]
-        choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large', 'all-in']
+        choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
         bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
 
         if all_targets:
@@ -725,8 +723,7 @@ def main():
             dist_path = os.path.join(args.output, "predicted_distribution.png")
             visualize_predicted_distribution(
                 results['predictions'],
-                results['target_names'],
-                dist_path
+                results['target_names'], dist_path
             )
             print(f"Распределение предсказанных классов сохранено в {dist_path}")
 
