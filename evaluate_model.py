@@ -605,11 +605,13 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.close()
 
                 # Перемещаем файлы из model_dir в model_dir_allin
+                import shutil
                 for file in ['allin_distribution.png', 'allin_stack_distribution.png']:
                     src = os.path.join(output_dir, file)
                     dst = os.path.join(output_dir + '_allin', file)
                     if os.path.exists(src):
-                        os.rename(src, dst)
+                        shutil.move(src, dst)
+                        print(f"Перемещен файл {file} в папку {output_dir}_allin")
 
     # Displaying all features in a table
     if all_targets:
