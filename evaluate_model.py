@@ -419,16 +419,34 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
         plt.close()
         print(f"Распределение размеров ставок сохранено в {sizes_dist_path}")
 
-        # Визуализация размеров ставок по улицам
-        street_sizes_path = os.path.join(output_dir, "street_bet_sizes.png")
+        # Визуализация распределения категорий размеров ставок
+        bet_categories_path = os.path.join(output_dir, "bet_size_categories.png")
         plt.figure(figsize=(12, 6))
-        sns.boxplot(data=df[df['Action'].isin(['Bet', 'Raise'])], x='Street_id', y='Bet')
-        plt.title('Размеры ставок по улицам')
-        plt.xlabel('Улица')
-        plt.ylabel('Размер ставки')
-        plt.savefig(street_sizes_path)
+        bet_df = df[df['Action'].isin(['Bet', 'Raise'])].copy()
+        bet_df['BetToPot'] = (bet_df['Bet'] / bet_df['Pot']) * 100
+        conditions = [
+            (bet_df['BetToPot'] < 26),
+            (bet_df['BetToPot'] >= 26) & (bet_df['BetToPot'] < 44),
+            (bet_df['BetToPot'] >= 44) & (bet_df['BetToPot'] < 58),
+            (bet_df['BetToPot'] >= 58) & (bet_df['BetToPot'] < 78),
+            (bet_df['BetToPot'] >= 78) & (bet_df['BetToPot'] < 92),
+            (bet_df['BetToPot'] >= 92) & (bet_df['BetToPot'] < 200),
+            (bet_df['BetToPot'] >= 200) | (bet_df['Allin'] == 1)
+        ]
+        choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large', 'all-in']
+        bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
+
+        # Plot distribution
+        sns.countplot(data=bet_df, x='BetSizeCategory', order=choices)
+        plt.title('Распределение категорий размеров ставок')
+        plt.xlabel('Категория ставки')
+        plt.ylabel('Количество')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(bet_categories_path)
         plt.close()
-        print(f"Размеры ставок по улицам сохранены в {street_sizes_path}")
+        print(f"Распределение категорий размеров ставок сохранено в {bet_categories_path}")
+
 
         # Визуализация размеров ставок относительно банка
         pot_sizes_path = os.path.join(output_dir, "pot_bet_sizes.png")
