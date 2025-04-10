@@ -93,13 +93,18 @@ HTML_TEMPLATE = '''
         </div>
         
         <div class="image-container">
-            <h2>Распределение классов All-in</h2>
-            <img src="/plot_allin/class_distribution.png" alt="Распределение классов All-in">
+            <h2>Распределение All-in</h2>
+            <img src="/plot_allin/allin_distribution.png" alt="Распределение All-in">
         </div>
         
         <div class="image-container">
-            <h2>История обучения All-in</h2>
-            <img src="/plot_allin/training_history.png" alt="История обучения All-in">
+            <h2>Распределение стеков при All-in</h2>
+            <img src="/plot_allin/allin_stack_distribution.png" alt="Распределение стеков при All-in">
+        </div>
+        
+        <div class="image-container">
+            <h2>Распределение размеров ставок</h2>
+            <img src="/plot_allin/bet_size_distribution.png" alt="Распределение размеров ставок">
         </div>
     </div>
 
