@@ -625,16 +625,16 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.close()
 
                 print("\nПримеры all-in ситуаций:")
-                allin_examples = df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head()
-                print(allin_examples)
+            allin_examples = df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head()
+            print(allin_examples)
 
-                # Анализ ситуаций с all-in
-                allin_df = df[df['Allin'] == 1].copy()
-                plt.figure(figsize=(12, 6))
-                sns.boxplot(data=allin_df, x='Street_id', y='Stack')
-                plt.title('Распределение стеков при all-in по улицам')
-                plt.savefig(os.path.join(output_dir + '_allin', 'allin_stack_distribution.png'))
-                plt.close()
+            # Анализ ситуаций с all-in
+            allin_df = df[df['Allin'] == 1].copy()
+            plt.figure(figsize=(12, 6))
+            sns.boxplot(data=allin_df, x='Street_id', y='Stack')
+            plt.title('Распределение стеков при all-in по улицам')
+            plt.savefig(os.path.join(output_dir + '_allin', 'allin_stack_distribution.png'))
+            plt.close()
 
                 # Перемещаем файлы из model_dir в model_dir_allin
                 import shutil
