@@ -17,7 +17,9 @@ def prepare_allin_data(df):
     df['IsAllIn'] = ((df['BetToPot'] >= 200) | (df['Allin'] == 1)).astype(int)
     
     print("\nРаспределение all-in решений:")
-    print(df['IsAllIn'].value_counts(normalize=True).round(3))
+    print(df['IsAllIn'].value_counts().to_frame('count'))
+    print("\nПримеры all-in:")
+    print(df[df['IsAllIn'] == 1][['Bet', 'Pot', 'BetToPot', 'Allin']].head())
     return df
 
 def train_allin_model(file_path, output_dir, **kwargs):
