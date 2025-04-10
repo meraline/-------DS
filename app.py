@@ -88,6 +88,11 @@ HTML_TEMPLATE = '''
         </div>
 
         <div class="image-container">
+            <h2>Динамика обучения модели</h2>
+            <img src="/plot/training_history.png" alt="Динамика обучения">
+        </div>
+
+        <div class="image-container">
             <h2>Уверенность в предсказаниях</h2>
             <img src="/plot/prediction_confidence.png" alt="Уверенность в предсказаниях">
         </div>
@@ -95,13 +100,18 @@ HTML_TEMPLATE = '''
 
     <div id="sizes" class="tab">
         <div class="image-container">
-            <h2>Распределение размеров ставок</h2>
-            <img src="/plot_size/bet_size_distribution.png" alt="Распределение размеров ставок">
+            <h2>Матрица ошибок по размерам ставок</h2>
+            <img src="/plot_size/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок">
         </div>
 
         <div class="image-container">
-            <h2>Матрица ошибок по размерам ставок</h2>
-            <img src="/plot_size/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок">
+            <h2>Динамика обучения модели размеров ставок</h2>
+            <img src="/plot_size/training_history.png" alt="Динамика обучения размеров ставок">
+        </div>
+
+        <div class="image-container">
+            <h2>Распределение размеров ставок</h2>
+            <img src="/plot_size/bet_size_distribution.png" alt="Распределение размеров ставок">
         </div>
 
         <div class="image-container">
@@ -124,6 +134,11 @@ HTML_TEMPLATE = '''
         </div>
 
         <div class="image-container">
+            <h2>Динамика обучения модели All-in</h2>
+            <img src="/plot_allin/training_history.png" alt="Динамика обучения All-in">
+        </div>
+
+        <div class="image-container">
             <h2>Распределение All-in</h2>
             <img src="/plot_allin/allin_distribution.png" alt="Распределение All-in">
         </div>
@@ -136,6 +151,11 @@ HTML_TEMPLATE = '''
         <div class="image-container">
             <h2>Распределение размеров ставок</h2>
             <img src="/plot_allin/bet_size_distribution.png" alt="Распределение размеров ставок">
+        </div>
+
+        <div class="image-container">
+            <h2>Матрица ошибок размеров ставок All-in</h2>
+            <img src="/plot_allin/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок All-in">
         </div>
     </div>
 
