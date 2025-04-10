@@ -162,7 +162,7 @@ def serve_plot_size(filename):
         if latest_file:
             filename = latest_file
             
-    plot_path = os.path.join('model_dir_size', filename)lename)  # Changed path to model_dir
+    plot_path = os.path.join('model_dir_size', filename)  # Changed path to model_dir
     if os.path.exists(plot_path):
         return send_file(plot_path, max_age=0)
     return "File not found", 404
