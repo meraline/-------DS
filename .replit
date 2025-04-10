@@ -37,6 +37,15 @@ args = "python train_main.py --epochs 10 --max_rows 1500000"
 task = "shell.exec"
 args = "python app.py"
 
+[[workflows.workflow]]
+name = "Train Both Models"
+author = 24271047
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python train_main.py --epochs 10 --max_rows 1500000"
+
 [[ports]]
 localPort = 5000
 externalPort = 80
