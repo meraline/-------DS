@@ -52,7 +52,7 @@ def index():
 def serve_plot(filename):
     plot_path = os.path.join('model_dir', filename)
     if os.path.exists(plot_path):
-        return send_file(plot_path, cache_timeout=0)
+        return send_file(plot_path, max_age=0)
     return "Plot not found", 404
 
 if __name__ == '__main__':
