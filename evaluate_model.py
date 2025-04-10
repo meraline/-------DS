@@ -378,7 +378,8 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir):
     results = {
         'predictions': y_pred,
         'probabilities': probas,
-        'target_names': [reverse_mapping[i] for i in sorted(reverse_mapping.keys())]
+        'target_names': [reverse_mapping[i] for i in sorted(reverse_mapping.keys())],
+        'test_data': test_data
     }
 
     # Если есть целевые метки, вычисляем метрики
