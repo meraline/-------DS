@@ -578,10 +578,11 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.xticks(rotation=45)
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, 'bet_size_categories_distribution.png'))
-            plt.close() = (df_allin['Allin'] == 1).astype(int)
-
-                # Получаем вероятности для all-in класса
-                all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
+            plt.close()
+            
+            # Получаем вероятности для all-in класса
+            y_true_allin = (df_allin['Allin'] == 1).astype(int)
+            all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
 
                 fpr, tpr, _ = roc_curve(y_true_allin, all_in_probs)
                 roc_auc = auc(fpr, tpr)
