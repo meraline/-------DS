@@ -487,7 +487,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
         # Создаем и сохраняем матрицу ошибок для размеров ставок
         bet_size_mask = df['Action'].isin(['Bet', 'Raise'])
-    if all_targets and bet_size_mask.any():
+        if all_targets and bet_size_mask.any():
             # Получаем предсказания для ставок
             bet_predictions = []
             for i, prob in enumerate(probas):
@@ -508,7 +508,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
             plt.close()
 
-            if all_targets:
+
             # Получаем истинные метки размеров ставок
             y_true_sizes = bet_df['BetSizeCategory'].values
 
