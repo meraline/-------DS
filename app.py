@@ -60,7 +60,7 @@ HTML_TEMPLATE = '''
     <div id="actions" class="tab tab-active">
         <div class="image-container">
             <h2>Матрица ошибок</h2>
-            <img src="/plot/confusion_matrix.png" alt="Матрица ошибок">
+            <img src="/plot/confusion_matrix.png?v={{timestamp}}" alt="Матрица ошибок">
         </div>
 
         <div class="image-container">
@@ -150,10 +150,12 @@ def serve_plot(filename):
     plot_path = get_file_path(filename, 'model_dir')
         
     if os.path.exists(plot_path):
+        timestamp = str(os.path.getmtime(plot_path))
         response = send_file(plot_path, mimetype='image/png')
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
+        response.headers['X-Version'] = timestamp
         return response
     return "File not found", 404
 
