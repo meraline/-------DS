@@ -25,7 +25,7 @@ models/
 logs/
 training_plots/
 evaluation_results/
-data/
+#data/
 checkpoints/
 
 # Файлы логов
