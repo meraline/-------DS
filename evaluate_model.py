@@ -462,21 +462,27 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
 
     # Добавляем матрицу ошибок для размеров ставок
-    bet_size_mask = df['Action'].isin(['Bet', 'Raise'])
-    if bet_size_mask.any():
-        bet_df = df[bet_size_mask].copy()
+    df_bets = df[df['Action'].isin(['Bet', 'Raise'])].copy()
+    if len(df_bets) > 0:
         # Категоризация ставок относительно банка (в процентах)
-        bet_df['BetToPot'] = (bet_df['Bet'] / bet_df['Pot']) * 100
+        df_bets['BetToPot'] = (df_bets['Bet'] / df_bets['Pot']) * 100
+        
+        # Создаем категории ставок
         conditions = [
-            (bet_df['BetToPot'] < 26),
-            (bet_df['BetToPot'] >= 26) & (bet_df['BetToPot'] < 44),
-            (bet_df['BetToPot'] >= 44) & (bet_df['BetToPot'] < 58),
-            (bet_df['BetToPot'] >= 58) & (bet_df['BetToPot'] < 78),
-            (bet_df['BetToPot'] >= 78) & (bet_df['BetToPot'] < 92),
-            (bet_df['BetToPot'] >= 92)
+            (df_bets['BetToPot'] < 26),
+            (df_bets['BetToPot'] >= 26) & (df_bets['BetToPot'] < 44),
+            (df_bets['BetToPot'] >= 44) & (df_bets['BetToPot'] < 58),
+            (df_bets['BetToPot'] >= 58) & (df_bets['BetToPot'] < 78),
+            (df_bets['BetToPot'] >= 78) & (df_bets['BetToPot'] < 92),
+            (df_bets['BetToPot'] >= 92)
         ]
         choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
-        bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
+        df_bets['BetSizeCategory'] = np.select(conditions, choices, default='medium')
+        
+        # Выводим статистику по категориям
+        print("\nРаспределение размеров ставок по категориям:")
+        size_stats = df_bets['BetSizeCategory'].value_counts()
+        print(size_stats)
 
         # Создаем и сохраняем матрицу ошибок для размеров ставок
         if all_targets and bet_size_mask.any():
@@ -569,16 +575,18 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.close()
 
             # Визуализация распределения размеров ставок по категориям
-            plt.figure(figsize=(12, 6))
-            bet_size_counts = df[df['Action'].isin(['Bet', 'Raise'])]['BetSizeCategory'].value_counts()
-            sns.barplot(x=bet_size_counts.index, y=bet_size_counts.values)
-            plt.title('Распределение размеров ставок по категориям')
-            plt.xlabel('Категория ставки')
-            plt.ylabel('Количество')
-            plt.xticks(rotation=45)
-            plt.tight_layout()
-            plt.savefig(os.path.join(output_dir, 'bet_size_categories_distribution.png'))
-            plt.close()
+            # Визуализация распределения размеров ставок по категориям
+            if len(df_bets) > 0:
+                plt.figure(figsize=(12, 6))
+                sns.countplot(data=df_bets, x='BetSizeCategory', order=choices)
+                plt.title('Распределение размеров ставок по категориям')
+                plt.xlabel('Категория ставки')
+                plt.ylabel('Количество')
+                plt.xticks(rotation=45)
+                plt.tight_layout()
+                plt.savefig(os.path.join(output_dir, 'bet_size_categories_distribution.png'))
+                plt.close()
+                print(f"Сохранена визуализация распределения в {output_dir}/bet_size_categories_distribution.png")
 
             # Получаем вероятности для all-in класса
             y_true_allin = (df_allin['Allin'] == 1).astype(int)
