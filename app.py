@@ -100,7 +100,7 @@ HTML_TEMPLATE = '''
 
     <div id="sizes" class="tab">
         <div class="image-container">
-            <h2>Матрица ошибок по размерам ставок</h2>
+            <h2>Матрица ошибок размеров ставок</h2>
             <img src="/plot_size/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок">
         </div>
 
@@ -132,16 +132,7 @@ HTML_TEMPLATE = '''
             <h2>Матрица ошибок размеров ставок All-in</h2>
             <img src="/plot_allin/allin_bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок All-in">
         </div>
-        <div class="image-container">
-            <h2>ROC-кривая для All-in</h2>
-            <img src="/plot_allin/allin_roc_curve.png" alt="ROC-кривая All-in">
-        </div>
-
-        <div class="image-container">
-            <h2>Динамика обучения модели All-in</h2>
-            <img src="/plot_allin/training_history.png" alt="Динамика обучения All-in">
-        </div>
-
+        
         <div class="image-container">
             <h2>Распределение All-in</h2>
             <img src="/plot_allin/allin_distribution.png" alt="Распределение All-in">
@@ -153,18 +144,13 @@ HTML_TEMPLATE = '''
         </div>
 
         <div class="image-container">
-            <h2>Распределение размеров ставок</h2>
-            <img src="/plot_allin/bet_size_distribution.png" alt="Распределение размеров ставок">
+            <h2>ROC-кривая для All-in</h2>
+            <img src="/plot_allin/allin_roc_curve.png" alt="ROC-кривая All-in">
         </div>
 
         <div class="image-container">
-            <h2>Матрица ошибок размеров ставок All-in</h2>
-            <img src="/plot_allin/allin_bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок All-in">
-        </div>
-        
-        <div class="image-container">
-            <h2>Матрица ошибок размеров ставок</h2>
-            <img src="/plot_allin/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок">
+            <h2>Динамика обучения модели All-in</h2>
+            <img src="/plot_allin/training_history.png" alt="Динамика обучения All-in">
         </div>
     </div>
 
