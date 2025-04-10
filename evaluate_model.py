@@ -599,20 +599,20 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.savefig(os.path.join(output_dir, 'allin_roc_curve.png'))
             plt.close()
 
-                # Анализ распределения all-in
-                print("\nСтатистика по all-in решениям:")
-                allin_stats = df_allin['Allin'].value_counts()
-                print(allin_stats)
+            # Анализ распределения all-in
+            print("\nСтатистика по all-in решениям:")
+            allin_stats = df_allin['Allin'].value_counts()
+            print(allin_stats)
 
-                # Создаем визуализацию распределения all-in
-                plt.figure(figsize=(10, 6))
-                labels = ['Не All-in', 'All-in']
-                colors = ['blue', 'red']
-                plt.bar(labels, allin_stats.values, color=colors)
-                plt.title('Распределение решений All-in')
-                plt.ylabel('Количество')
-                plt.savefig(os.path.join(output_dir + '_allin', 'allin_distribution.png'))
-                plt.close()
+            # Создаем визуализацию распределения all-in
+            plt.figure(figsize=(10, 6))
+            labels = ['Не All-in', 'All-in']
+            colors = ['blue', 'red']
+            plt.bar(labels, allin_stats.values, color=colors)
+            plt.title('Распределение решений All-in')
+            plt.ylabel('Количество')
+            plt.savefig(os.path.join(output_dir + '_allin', 'allin_distribution.png'))
+            plt.close()
 
                 # Визуализация распределения размеров ставок
                 plt.figure(figsize=(12, 6))
