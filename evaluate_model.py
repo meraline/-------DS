@@ -409,6 +409,22 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
     # Дополнительные визуализации для модели размеров ставок
     df = test_data['df'] # Accessing df from test_data
+    
+    # Создаем bet_df здесь, чтобы он был доступен во всей функции
+    bet_df = df[df['Action'].isin(['Bet', 'Raise'])].copy()
+    if len(bet_df) > 0:
+        bet_df['BetToPot'] = (bet_df['Bet'] / bet_df['Pot']) * 100
+        conditions = [
+            (bet_df['BetToPot'] < 26),
+            (bet_df['BetToPot'] >= 26) & (bet_df['BetToPot'] < 44),
+            (bet_df['BetToPot'] >= 44) & (bet_df['BetToPot'] < 58),
+            (bet_df['BetToPot'] >= 58) & (bet_df['BetToPot'] < 78),
+            (bet_df['BetToPot'] >= 78) & (bet_df['BetToPot'] < 92),
+            (bet_df['BetToPot'] >= 92)
+        ]
+        choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
+        bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
+
     if 'size' in output_dir:
         # Визуализация распределения размеров ставок
         sizes_dist_path = os.path.join(output_dir, "bet_sizes_distribution.png")
