@@ -551,11 +551,11 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 # Получаем вероятности для all-in
                 y_true_allin = df_allin['Allin'].values
                 y_pred_proba_allin = probas[:, -1]  # Вероятности для последнего класса (all-in)
-                
+
                 # Строим ROC-кривую
                 fpr, tpr, _ = roc_curve(y_true_allin, y_pred_proba_allin)
                 roc_auc = auc(fpr, tpr)
-                
+
                 plt.figure(figsize=(8, 6))
                 plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC кривая (AUC = {roc_auc:.2f})')
                 plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
@@ -579,7 +579,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, 'bet_size_categories_distribution.png'))
             plt.close()
-            
+
             # Получаем вероятности для all-in класса
             y_true_allin = (df_allin['Allin'] == 1).astype(int)
             all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
@@ -641,9 +641,9 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             for file in ['allin_distribution.png', 'allin_stack_distribution.png']:
                 src = os.path.join(output_dir, file)
                 dst = os.path.join(output_dir + '_allin', file)
-                    if os.path.exists(src):
-                        shutil.move(src, dst)
-                        print(f"Перемещен файл {file} в папку {output_dir}_allin")
+                if os.path.exists(src):
+                    shutil.move(src, dst)
+                    print(f"Перемещен файл {file} в папку {output_dir}_allin")
 
     # Displaying all features in a table
     if all_targets:
