@@ -670,7 +670,7 @@ def main():
     parser.add_argument('--test', type=str, default='/home/tofan/data1/csv/split_data/buyin_type_MTT_250.csv', required=False, help='Путь к файлу с тестовыми данными')
     parser.add_argument('--output', type=str, default='/home/tofan/Документы/GitLab_grace/ДИПЛОМ DS/evaluation_results', help='Путь к директории для сохранения результатов')
     parser.add_argument('--max_rows', type=int, default=150000, help='Максимальное количество строк для загрузки')
-    <new_str>
+    parser
     parser.add_argument('--skip_rows', type=int, default=0, help='Количество строк данных для пропуска после заголовка')
     parser.add_argument('--tsne_samples', type=int, default=15000, help='Максимальное количество образцов для t-SNE визуализации')
     args = parser.parse_args()
