@@ -529,29 +529,34 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 if bet_size_mask.iloc[i]:
                     bet_predictions.append(choices[np.argmax(prob)])
 
-            # Матрица ошибок для обычных ставок
-            cm_sizes = confusion_matrix(df_bets['BetSizeCategory'].values, bet_predictions, labels=choices)
-            plt.figure(figsize=(12, 8))
-            sns.heatmap(cm_sizes, annot=True, fmt='d', cmap='YlOrRd',
-                       xticklabels=choices, yticklabels=choices)
-            plt.title('Матрица ошибок для размеров ставок')
-            plt.xlabel('Предсказанные значения')
-            plt.ylabel('Истинные значения')
-            plt.tight_layout()
-            plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
-            plt.close()
+            # Матрица ошибок для обычных ставок (исключая all-in)
+            regular_bets = df_bets[df_bets['Allin'] != 1].copy()
+            if len(regular_bets) > 0:
+                regular_predictions = [choices[np.argmax(prob)] for i, prob in enumerate(probas) 
+                                    if bet_size_mask.iloc[i] and df.iloc[i]['Allin'] != 1]
+                
+                cm_sizes = confusion_matrix(regular_bets['BetSizeCategory'].values, 
+                                          regular_predictions, 
+                                          labels=choices)
+                plt.figure(figsize=(12, 8))
+                sns.heatmap(cm_sizes, annot=True, fmt='d', cmap='YlOrRd',
+                           xticklabels=choices, yticklabels=choices)
+                plt.title('Матрица ошибок для размеров ставок')
+                plt.xlabel('Предсказанные значения')
+                plt.ylabel('Истинные значения')
+                plt.tight_layout()
+                plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
+                plt.close()
 
             # Матрица ошибок для all-in
-            allin_df = df[df['Allin'] == 1].copy()
-            if len(allin_df) > 0:
-                allin_df['BetToPot'] = (allin_df['Bet'] / allin_df['Pot']) * 100
-                allin_df['BetSizeCategory'] = np.select(conditions, choices, default='very_large')
-
-                allin_predictions = ['very_large'] * len(allin_df)
-                cm_allin = confusion_matrix(allin_df['BetSizeCategory'].values, 
-                                         allin_predictions,
-                                         labels=choices)
-
+            allin_bets = df_bets[df_bets['Allin'] == 1].copy()
+            if len(allin_bets) > 0:
+                allin_bets['BetToPot'] = (allin_bets['Bet'] / allin_bets['Pot']) * 100
+                allin_predictions = ['very_large'] * len(allin_bets)
+                
+                cm_allin = confusion_matrix(allin_bets['BetSizeCategory'].values,
+                                          allin_predictions,
+                                          labels=choices)
                 plt.figure(figsize=(12, 8))
                 sns.heatmap(cm_allin, annot=True, fmt='d', cmap='YlOrRd',
                            xticklabels=choices, yticklabels=choices)
