@@ -326,7 +326,7 @@ def prepare_test_data(file_path, artifacts, max_rows=None, skip_rows=0):
     return result
 
 # ---------------------- 4. Функции для оценки модели ----------------------
-def evaluate_model(model, test_loader, action_mapping, device, output_dir):
+def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_data=None):
     """
     Оценка модели на тестовых данных
     """
@@ -538,7 +538,8 @@ def main():
             test_data['test_loader'],
             artifacts['action_mapping'],
             artifacts['device'],
-            args.output
+            args.output,
+            test_data
         )
 
         # Визуализация результатов - используем импортированные функции напрямую
