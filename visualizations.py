@@ -107,6 +107,11 @@ def visualize_confusion_matrix(true_labels, predictions, action_mapping, output_
     Returns:
         matplotlib.figure.Figure: Фигура с матрицей ошибок
     """
+    # Добавляем временную метку к имени файла
+    if output_path:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        base, ext = os.path.splitext(output_path)
+        output_path = f"{base}_{timestamp}{ext}"
     # Обратное отображение меток
     reverse_mapping = {v: k for k, v in action_mapping.items()}
     target_names = [reverse_mapping[i] for i in sorted(reverse_mapping.keys())]
@@ -136,6 +141,12 @@ def visualize_confusion_matrix(true_labels, predictions, action_mapping, output_
 def visualize_class_distribution(true_labels, predictions, target_names, output_path=None):
     """
     Визуализация распределения классов в предсказаниях и истинных метках
+    """
+    # Добавляем временную метку к имени файла
+    if output_path:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        base, ext = os.path.splitext(output_path)
+        output_path = f"{base}_{timestamp}{ext}"
     
     Args:
         true_labels: Истинные метки
@@ -193,6 +204,12 @@ def visualize_class_distribution(true_labels, predictions, target_names, output_
 def visualize_prediction_confidence(predictions, probabilities, true_labels, target_names, output_path=None, n_samples=20):
     """
     Визуализация уверенности модели в предсказаниях
+    """
+    # Добавляем временную метку к имени файла
+    if output_path:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        base, ext = os.path.splitext(output_path)
+        output_path = f"{base}_{timestamp}{ext}"
     
     Args:
         predictions: Предсказанные метки
@@ -297,7 +314,13 @@ def visualize_predicted_distribution(predictions, target_names, output_path=None
 
 def visualize_tsne(features, predictions, true_labels=None, output_path=None, max_samples=10000):
     """
-    Создает t-SNE визуализацию для признаков, раскрашенную по предсказанным (и опционально истинным) меткам
+    Создает t-SNE визуализацию для признаков
+    """
+    # Добавляем временную метку к имени файла
+    if output_path:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        base, ext = os.path.splitext(output_path)
+        output_path = f"{base}_{timestamp}{ext}", раскрашенную по предсказанным (и опционально истинным) меткам
     
     Args:
         features: Признаки для визуализации
