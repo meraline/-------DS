@@ -579,7 +579,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.bar(labels, allin_stats.values, color=colors)
                 plt.title('Распределение решений All-in')
                 plt.ylabel('Количество')
-                plt.savefig(os.path.join(output_dir, 'allin_distribution.png'))
+                plt.savefig(os.path.join(output_dir + '_allin', 'allin_distribution.png'))
                 plt.close()
 
 
@@ -602,7 +602,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.figure(figsize=(12, 6))
                 sns.boxplot(data=allin_df, x='Street_id', y='Stack')
                 plt.title('Распределение стеков при all-in по улицам')
-                plt.savefig(os.path.join(output_dir, 'allin_stack_distribution.png'))
+                plt.savefig(os.path.join(output_dir + '_allin', 'allin_stack_distribution.png'))
                 plt.close()
 
     # Displaying all features in a table
@@ -628,6 +628,7 @@ def main():
 
     # Создание директории для результатов, если она не существует
     os.makedirs(args.output, exist_ok=True)
+    os.makedirs(args.output + '_allin', exist_ok=True) #create _allin directory
 
     print(f"Результаты оценки будут сохранены в {args.output}")
 
@@ -692,7 +693,7 @@ def main():
                 all_features,
                 all_predictions,
                 all_true_labels,
-                tsnepath,
+                tsne_path,
                 max_samples=args.tsne_samples
             )
             print(f"t-SNE визуализация сохранена в {tsne_path}")
