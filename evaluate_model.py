@@ -615,14 +615,14 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.close()
 
                 # Визуализация распределения размеров ставок
-                plt.figure(figsize=(12, 6))
-                bet_data = df_allin[df_allin['Action'].isin(['Bet', 'Raise'])]['Bet']
-                plt.hist(bet_data, bins=50, color='skyblue', edgecolor='black')
-                plt.title('Распределение размеров ставок')
-                plt.xlabel('Размер ставки')
-                plt.ylabel('Частота')
-                plt.savefig(os.path.join(output_dir + '_allin', 'bet_size_distribution.png'))
-                plt.close()
+            plt.figure(figsize=(12, 6))
+            bet_data = df_allin[df_allin['Action'].isin(['Bet', 'Raise'])]['Bet']
+            plt.hist(bet_data, bins=50, color='skyblue', edgecolor='black')
+            plt.title('Распределение размеров ставок')
+            plt.xlabel('Размер ставки')
+            plt.ylabel('Частота')
+            plt.savefig(os.path.join(output_dir + '_allin', 'bet_size_distribution.png'))
+            plt.close()
 
                 print("\nПримеры all-in ситуаций:")
                 allin_examples = df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head()
