@@ -17,7 +17,7 @@ if __name__ == "__main__":
         description="Обучение RWKV модели на покерных данных")
     parser.add_argument("--file",
                         type=str,
-                        default="./data/buyin_type_MTT_500.csv",
+                        default="./data/buyin_type_MTT_200.csv",
                         help="Путь к CSV-файлу с данными")
     parser.add_argument("--output",
                         type=str,
