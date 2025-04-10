@@ -54,12 +54,14 @@ if __name__ == "__main__":
     
     print("\n=== Этап 2: Валидация модели ===")
     from evaluate_model import main as evaluate_main
-    evaluate_main([
+    sys.argv = [
+        "evaluate_model.py",
         "--model_dir", args.output,
         "--test", args.file,
         "--output", args.output,
         "--max_rows", str(min(500000, args.max_rows))
-    ])
+    ]
+    evaluate_main()
     
     print("\n=== Этап 3: Генерация визуализаций ===")
     print("Все визуализации сохранены в директории:", args.output)
