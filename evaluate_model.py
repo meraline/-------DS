@@ -547,7 +547,38 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             # Визуализация ROC-кривой для all-in предсказаний
             df_allin = test_data['df'].copy()
             if 'Allin' in df_allin.columns:
-                y_true_allin = (df_allin['Allin'] == 1).astype(int)
+                from sklearn.metrics import roc_curve, auc
+                # Получаем вероятности для all-in
+                y_true_allin = df_allin['Allin'].values
+                y_pred_proba_allin = probas[:, -1]  # Вероятности для последнего класса (all-in)
+                
+                # Строим ROC-кривую
+                fpr, tpr, _ = roc_curve(y_true_allin, y_pred_proba_allin)
+                roc_auc = auc(fpr, tpr)
+                
+                plt.figure(figsize=(8, 6))
+                plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC кривая (AUC = {roc_auc:.2f})')
+                plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+                plt.xlim([0.0, 1.0])
+                plt.ylim([0.0, 1.05])
+                plt.xlabel('False Positive Rate')
+                plt.ylabel('True Positive Rate')
+                plt.title('ROC-кривая для предсказания All-in')
+                plt.legend(loc="lower right")
+                plt.savefig(os.path.join(output_dir, 'allin_roc_curve.png'))
+                plt.close()
+
+            # Визуализация распределения размеров ставок по категориям
+            plt.figure(figsize=(12, 6))
+            bet_size_counts = df[df['Action'].isin(['Bet', 'Raise'])]['BetSizeCategory'].value_counts()
+            sns.barplot(x=bet_size_counts.index, y=bet_size_counts.values)
+            plt.title('Распределение размеров ставок по категориям')
+            plt.xlabel('Категория ставки')
+            plt.ylabel('Количество')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_dir, 'bet_size_categories_distribution.png'))
+            plt.close() = (df_allin['Allin'] == 1).astype(int)
 
                 # Получаем вероятности для all-in класса
                 all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
