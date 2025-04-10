@@ -144,13 +144,13 @@ HTML_TEMPLATE = '''
         </div>
 
         <div class="image-container">
-            <h2>ROC-кривая для All-in</h2>
-            <img src="/plot_allin/allin_roc_curve.png" alt="ROC-кривая All-in">
+            <h2>Динамика обучения модели All-in</h2>
+            <img src="/plot_allin/training_history.png" alt="Динамика обучения All-in">
         </div>
 
         <div class="image-container">
-            <h2>Динамика обучения модели All-in</h2>
-            <img src="/plot_allin/training_history.png" alt="Динамика обучения All-in">
+            <h2>График ошибок предсказания All-in</h2>
+            <img src="/plot_allin/error_dynamics.png" alt="График ошибок All-in">
         </div>
     </div>
 
