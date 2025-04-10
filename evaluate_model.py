@@ -582,7 +582,6 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.savefig(os.path.join(output_dir + '_allin', 'allin_distribution.png'))
                 plt.close()
 
-
                 # Визуализация распределения размеров ставок
                 plt.figure(figsize=(12, 6))
                 bet_data = df_allin[df_allin['Action'].isin(['Bet', 'Raise'])]['Bet']
@@ -590,7 +589,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.title('Распределение размеров ставок')
                 plt.xlabel('Размер ставки')
                 plt.ylabel('Частота')
-                plt.savefig(os.path.join(output_dir, 'bet_size_distribution.png'))
+                plt.savefig(os.path.join(output_dir + '_allin', 'bet_size_distribution.png'))
                 plt.close()
 
                 print("\nПримеры all-in ситуаций:")
@@ -604,6 +603,13 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.title('Распределение стеков при all-in по улицам')
                 plt.savefig(os.path.join(output_dir + '_allin', 'allin_stack_distribution.png'))
                 plt.close()
+
+                # Перемещаем файлы из model_dir в model_dir_allin
+                for file in ['allin_distribution.png', 'allin_stack_distribution.png']:
+                    src = os.path.join(output_dir, file)
+                    dst = os.path.join(output_dir + '_allin', file)
+                    if os.path.exists(src):
+                        os.rename(src, dst)
 
     # Displaying all features in a table
     if all_targets:
