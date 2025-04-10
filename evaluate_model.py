@@ -16,6 +16,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime #import datetime module
+from sklearn.manifold import TSNE #import TSNE
 
 # Импортируем функции визуализации из отдельного файла
 from visualizations import (

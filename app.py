@@ -1,6 +1,19 @@
 from flask import Flask, render_template_string, send_file
 import os
 
+def get_latest_file(filename, directory):
+    """Get the latest file with timestamp in the name"""
+    import glob
+    base_name = filename.split('.')[0]
+    extension = filename.split('.')[-1]
+    pattern = os.path.join(directory, f"{base_name}*.{extension}")
+    files = glob.glob(pattern)
+    if files:
+        return max(files, key=os.path.getctime)
+    return os.path.join(directory, filename)
+
+
+
 app = Flask(__name__)
 
 HTML_TEMPLATE = '''
@@ -134,8 +147,12 @@ def index():
 
 @app.route('/plot/<filename>')
 def serve_plot(filename):
-
-    plot_path = os.path.join('model_dir', filename)
+    # Добавляем проверку на последний файл с таким именем
+    if any(pattern in filename for pattern in ['confusion_matrix', 'class_distribution', 'tsne_visualization']):
+        plot_path = get_latest_file(filename, 'model_dir')
+    else:
+        plot_path = os.path.join('model_dir', filename)
+        
     if os.path.exists(plot_path):
         response = send_file(plot_path, mimetype='image/png')
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
