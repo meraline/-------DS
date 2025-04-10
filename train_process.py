@@ -169,15 +169,20 @@ def train_poker_model(file_path, output_dir=None, hidden_dim=128, num_layers=4, 
     
     # Подготовка данных с балансировкой классов
     print("Загрузка и подготовка данных...")
-    df = pd.read_csv(file_path)
-    if max_rows:
-        df = df.head(max_rows)
+    if isinstance(file_path, str):
+        df = pd.read_csv(file_path)
+        if max_rows:
+            df = df.head(max_rows)
+    else:
+        df = file_path
+        if max_rows:
+            df = df.head(max_rows)
     
     # Применяем пользовательскую функцию подготовки данных если она предоставлена
     if data_preparation_fn:
         df = data_preparation_fn(df)
     
-    data_dict = load_and_prepare_data(df, balance_classes=True)
+    data_dict = load_and_prepare_data(df, balance_classes=True, is_dataframe=True)
     
     # Визуализация распределения классов
     print("Визуализация распределения классов...")

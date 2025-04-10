@@ -202,27 +202,31 @@ def verify_class_balance(y_train, action_mapping):
         print(f"  {action_name}: {train_pct:.1f}%")
 
 
-def load_and_prepare_data(file_path, max_rows=None, balance_classes=True, target_fold_proportion=None):
+def load_and_prepare_data(file_path, max_rows=None, balance_classes=True, target_fold_proportion=None, is_dataframe=False):
     """
     Загрузка и подготовка покерных данных
     
     Args:
-        file_path (str): Путь к CSV-файлу с покерными данными
+        file_path (str или pd.DataFrame): Путь к CSV-файлу или DataFrame с покерными данными
         max_rows (int, optional): Максимальное количество строк для загрузки
         balance_classes (bool): Выполнять ли балансировку классов
         target_fold_proportion (float, optional): Целевая доля класса Fold
+        is_dataframe (bool): True если file_path это DataFrame, False если путь к файлу
         
     Returns:
         dict: Словарь с подготовленными данными и метаинформацией
     """
-    print(f"Загрузка данных из {file_path}...")
-    
-    # Загрузка данных
-    if max_rows:
-        df = pd.read_csv(file_path, nrows=max_rows)
-        df = check_and_remove_column_duplicates(df, "начальной обработкой")
+    if is_dataframe:
+        df = file_path
+        print("Используется предоставленный DataFrame...")
     else:
-        df = pd.read_csv(file_path)
+        print(f"Загрузка данных из {file_path}...")
+        # Загрузка данных
+        if max_rows:
+            df = pd.read_csv(file_path, nrows=max_rows)
+            df = check_and_remove_column_duplicates(df, "начальной обработкой")
+        else:
+            df = pd.read_csv(file_path)
     
     print(f"Загружено {len(df)} строк данных")
     
