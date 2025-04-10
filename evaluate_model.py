@@ -508,7 +508,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
             plt.close()
 
-        if all_targets:
+            if all_targets:
             # Получаем истинные метки размеров ставок
             y_true_sizes = bet_df['BetSizeCategory'].values
 
