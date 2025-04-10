@@ -4,7 +4,7 @@ modules = ["web", "python-3.12", "nodejs-20"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Train Model"
+runButton = "Run Visualization"
 
 [[workflows.workflow]]
 name = "Train Model"
@@ -14,3 +14,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python train_main.py"
+
+[[workflows.workflow]]
+name = "Run Visualization"
+author = 24271047
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python app.py"
