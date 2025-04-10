@@ -22,10 +22,29 @@ HTML_TEMPLATE = '''
 <head>
     <title>Результаты оценки модели</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .tab { display: none; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .tab { 
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
         .tab-active { display: block; }
-        .tabs { margin-bottom: 20px; }
+        .tabs { 
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
         .tab-button { 
             padding: 10px 20px; 
             margin-right: 5px;

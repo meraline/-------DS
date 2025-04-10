@@ -389,10 +389,26 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
         y_true = np.array(all_targets)
         results['true_labels'] = y_true
 
-        # Вычисление метрик
+        # Расширенные метрики оценки
+        from sklearn.metrics import precision_recall_fscore_support, roc_auc_score
+        
+        # Базовые метрики
         accuracy = accuracy_score(y_true, y_pred)
         report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
         cm = confusion_matrix(y_true, y_pred)
+        
+        # Дополнительные метрики
+        precision, recall, f1, _ = precision_recall_fscore_support(y_true, y_pred, average='weighted')
+        
+        # ROC AUC для мультиклассовой классификации
+        y_prob = probas
+        roc_auc = roc_auc_score(y_true, y_prob, multi_class='ovr')
+        
+        print(f"\nРасширенные метрики:")
+        print(f"Precision: {precision:.4f}")
+        print(f"Recall: {recall:.4f}")
+        print(f"F1-score: {f1:.4f}")
+        print(f"ROC AUC: {roc_auc:.4f}")
 
         results['accuracy'] = accuracy
         results['report'] = report
@@ -425,9 +441,17 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
         choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
         bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
 
+    # Определяем тип модели и соответствующую директорию для сохранения графиков
+    model_type = 'base'
     if 'size' in output_dir:
-        # Визуализация распределения размеров ставок
-        sizes_dist_path = os.path.join(output_dir, "bet_sizes_distribution.png")
+        model_type = 'size'
+    elif 'allin' in output_dir:
+        model_type = 'allin'
+
+    # Создаем графики в зависимости от типа модели
+    if model_type == 'size':
+        # Визуализация размеров ставок
+        sizes_dist_path = os.path.join(output_dir, "bet_size_distribution.png")
         plt.figure(figsize=(12, 6))
         sns.histplot(data=df[df['Action'].isin(['Bet', 'Raise'])], x='Bet', bins=50)
         plt.title('Распределение размеров ставок')

@@ -304,7 +304,19 @@ def visualize_predicted_distribution(predictions, target_names, output_path=None
     return plt.gcf()
 
 
-def visualize_tsne(features, predictions, true_labels=None, output_path=None, max_samples=10000):
+def visualize_tsne(features, predictions, true_labels=None, output_path=None, max_samples=10000, perplexity=30, learning_rate=200):
+    """
+    Улучшенная t-SNE визуализация с настраиваемыми параметрами
+    
+    Args:
+        features: Признаки для визуализации
+        predictions: Предсказанные метки классов
+        true_labels: Истинные метки классов (опционально)
+        output_path: Путь для сохранения изображения
+        max_samples: Максимальное количество образцов
+        perplexity: Параметр перплексии для t-SNE
+        learning_rate: Скорость обучения для t-SNE
+    """
     """
     Создает t-SNE визуализацию для признаков
 
