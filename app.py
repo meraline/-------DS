@@ -1,6 +1,13 @@
 from flask import Flask, render_template_string, send_file
 import os
 
+def get_latest_file(prefix, directory):
+    """Get the latest file with given prefix from directory"""
+    files = [f for f in os.listdir(directory) if f.startswith(prefix)]
+    if not files:
+        return None
+    return max(files, key=lambda x: os.path.getctime(os.path.join(directory, x)))
+
 def get_file_path(filename, directory):
     """Get the file path"""
     return os.path.join(directory, filename)
@@ -152,13 +159,7 @@ def serve_plot(filename):
 
 @app.route('/plot_size/<filename>')
 def serve_plot_size(filename):
-    # Аналогично для размеров ставок
-    if any(pattern in filename for pattern in ['confusion_matrix', 'class_distribution']):
-        latest_file = get_latest_file(filename.split('_')[0], 'model_dir_size')
-        if latest_file:
-            filename = latest_file
-
-    plot_path = os.path.join('model_dir_size', filename)  # Changed path to model_dir
+    plot_path = os.path.join('model_dir_size', filename)
     if os.path.exists(plot_path):
         response = send_file(plot_path, mimetype='image/png')
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
