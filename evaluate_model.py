@@ -485,7 +485,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             for i, prob in enumerate(probas):
                 if bet_size_mask.iloc[i]:
                     bet_predictions.append(choices[np.argmax(prob)])
-            
+
             plt.figure(figsize=(12, 8))
             cm_sizes = confusion_matrix(bet_df['BetSizeCategory'].values, 
                                      bet_predictions,
@@ -569,9 +569,33 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
                 # Анализ распределения all-in
                 print("\nСтатистика по all-in решениям:")
-                print(df_allin['Allin'].value_counts())
+                allin_stats = df_allin['Allin'].value_counts()
+                print(allin_stats)
+
+                # Создаем визуализацию распределения all-in
+                plt.figure(figsize=(10, 6))
+                labels = ['Не All-in', 'All-in']
+                colors = ['blue', 'red']
+                plt.bar(labels, allin_stats.values, color=colors)
+                plt.title('Распределение решений All-in')
+                plt.ylabel('Количество')
+                plt.savefig(os.path.join(output_dir, 'allin_distribution.png'))
+                plt.close()
+
+
+                # Визуализация распределения размеров ставок
+                plt.figure(figsize=(12, 6))
+                bet_data = df_allin[df_allin['Action'].isin(['Bet', 'Raise'])]['Bet']
+                plt.hist(bet_data, bins=50, color='skyblue', edgecolor='black')
+                plt.title('Распределение размеров ставок')
+                plt.xlabel('Размер ставки')
+                plt.ylabel('Частота')
+                plt.savefig(os.path.join(output_dir, 'bet_size_distribution.png'))
+                plt.close()
+
                 print("\nПримеры all-in ситуаций:")
-                print(df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head())
+                allin_examples = df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head()
+                print(allin_examples)
 
                 # Анализ ситуаций с all-in
                 allin_df = df[df['Allin'] == 1].copy()
@@ -668,7 +692,7 @@ def main():
                 all_features,
                 all_predictions,
                 all_true_labels,
-                tsne_path,
+                tsnepath,
                 max_samples=args.tsne_samples
             )
             print(f"t-SNE визуализация сохранена в {tsne_path}")
