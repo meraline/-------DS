@@ -10,8 +10,12 @@ from train_process import train_poker_model
 
 def prepare_allin_data(df):
     """Подготовка данных для модели all-in"""
+    # Вычисляем отношение ставки к банку
+    df['BetToPot'] = (df['Bet'] / df['Pot'] * 100).fillna(0)
+    
     # Создаем целевую переменную (1 для all-in, 0 для остальных)
     df['IsAllIn'] = ((df['BetToPot'] >= 200) | (df['Allin'] == 1)).astype(int)
+    
     print("\nРаспределение all-in решений:")
     print(df['IsAllIn'].value_counts(normalize=True).round(3))
     return df
