@@ -522,6 +522,32 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             with open(os.path.join(output_dir, 'bet_size_classification_report.txt'), 'w') as f:
                 f.write(classification_report(y_true_sizes, y_pred_sizes))
 
+            # Визуализация ROC-кривой для all-in предсказаний
+            if 'allin' in output_dir:
+                from sklearn.metrics import roc_curve, auc
+                fpr, tpr, _ = roc_curve(y_true_sizes, y_pred_sizes)
+                roc_auc = auc(fpr, tpr)
+
+                plt.figure(figsize=(10, 8))
+                plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+                plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+                plt.xlim([0.0, 1.0])
+                plt.ylim([0.0, 1.05])
+                plt.xlabel('False Positive Rate')
+                plt.ylabel('True Positive Rate')
+                plt.title('ROC Curve for All-in Predictions')
+                plt.legend(loc="lower right")
+                plt.savefig(os.path.join(output_dir, 'allin_roc_curve.png'))
+                plt.close()
+
+                # Анализ ситуаций с all-in
+                allin_df = df[df['Allin'] == 1].copy()
+                plt.figure(figsize=(12, 6))
+                sns.boxplot(data=allin_df, x='Street_id', y='Stack')
+                plt.title('Распределение стеков при all-in по улицам')
+                plt.savefig(os.path.join(output_dir, 'allin_stack_distribution.png'))
+                plt.close()
+
     # Displaying all features in a table
     if all_targets:
         feature_table_path = os.path.join(output_dir, 'feature_table.csv')

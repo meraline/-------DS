@@ -55,6 +55,18 @@ if __name__ == "__main__":
         max_rows=args.max_rows
     )
 
+    # Запуск обучения третьей модели (all-in)
+    from train_allin_model import train_allin_model
+    result_allin = train_allin_model(
+        file_path=args.file,
+        output_dir=args.output + "_allin",
+        hidden_dim=args.hidden_dim,
+        num_layers=args.num_layers,
+        epochs=args.epochs,
+        learning_rate=args.lr,
+        max_rows=args.max_rows
+    )
+
     print("=" * 60)
     print(f"Обучение завершено. Модель (действия) сохранена в: {result_actions['output_dir']}")
     print(f"Файлы модели (действия):")
