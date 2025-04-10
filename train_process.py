@@ -141,7 +141,7 @@ def train_model_with_history(data_dict, hidden_dim=64, num_layers=2, epochs=10, 
     return model, history
 
 # ---------------------- Основная функция обучения ----------------------
-def train_poker_model(file_path, output_dir=None, hidden_dim=128, num_layers=4, epochs=10, learning_rate=0.001, max_rows=None):
+def train_poker_model(file_path, output_dir=None, hidden_dim=128, num_layers=4, epochs=10, learning_rate=0.001, max_rows=None, data_preparation_fn=None):
     """
     Основная функция для обучения покерной модели
     
@@ -153,6 +153,7 @@ def train_poker_model(file_path, output_dir=None, hidden_dim=128, num_layers=4, 
         epochs (int): Количество эпох обучения
         learning_rate (float): Скорость обучения
         max_rows (int, optional): Максимальное число строк для загрузки
+        data_preparation_fn (callable, optional): Функция для дополнительной подготовки данных
         
     Returns:
         dict: Результаты обучения
@@ -167,7 +168,15 @@ def train_poker_model(file_path, output_dir=None, hidden_dim=128, num_layers=4, 
     
     # Подготовка данных с балансировкой классов
     print("Загрузка и подготовка данных...")
-    data_dict = load_and_prepare_data(file_path, max_rows=max_rows, balance_classes=True)
+    df = pd.read_csv(file_path)
+    if max_rows:
+        df = df.head(max_rows)
+    
+    # Применяем пользовательскую функцию подготовки данных если она предоставлена
+    if data_preparation_fn:
+        df = data_preparation_fn(df)
+    
+    data_dict = load_and_prepare_data(df, balance_classes=True)
     
     # Визуализация распределения классов
     print("Визуализация распределения классов...")
