@@ -4,7 +4,26 @@
 """
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.preprocessing import LabelEncoder
+
+def visualize_bet_size_distribution(df, output_dir):
+    """Визуализация распределения категорий размеров ставок"""
+    plt.figure(figsize=(12, 6))
+    counts = df['BetSizeCategory'].value_counts()
+    sns.barplot(x=counts.index, y=counts.values)
+    plt.title('Распределение категорий размеров ставок')
+    plt.xlabel('Категория')
+    plt.ylabel('Количество')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig(f'{output_dir}/bet_size_distribution.png')
+    plt.close()
+    
+    print("\nРаспределение категорий размеров ставок:")
+    for category, count in counts.items():
+        print(f"{category}: {count} ({count/len(df)*100:.1f}%)")
 
 def calculate_bet_size_category(row):
     """Определяет категорию размера ставки"""
