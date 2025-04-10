@@ -479,10 +479,16 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
         bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
 
         # Создаем и сохраняем матрицу ошибок для размеров ставок
-        if all_targets:
+        if all_targets and bet_size_mask.any():
+            # Получаем предсказания для ставок
+            bet_predictions = []
+            for i, prob in enumerate(probas):
+                if bet_size_mask.iloc[i]:
+                    bet_predictions.append(choices[np.argmax(prob)])
+            
             plt.figure(figsize=(12, 8))
-            cm_sizes = confusion_matrix(bet_df['BetSizeCategory'], 
-                                     [choices[np.argmax(p)] for p in probas[bet_size_mask]], 
+            cm_sizes = confusion_matrix(bet_df['BetSizeCategory'].values, 
+                                     bet_predictions,
                                      labels=choices)
             sns.heatmap(cm_sizes, annot=True, fmt='d',
                        xticklabels=choices,
@@ -546,7 +552,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 # Получаем вероятности для all-in класса
                 all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
 
-                fpr, tpr, _ = roc_curve(y_true_allin, probs)
+                fpr, tpr, _ = roc_curve(y_true_allin, all_in_probs)
                 roc_auc = auc(fpr, tpr)
 
                 plt.figure(figsize=(10, 8))
