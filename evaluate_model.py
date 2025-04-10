@@ -15,6 +15,7 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_curve, auc
 import matplotlib.pyplot as plt
 import seaborn as sns
+import datetime #import datetime module
 
 # Импортируем функции визуализации из отдельного файла
 from visualizations import (
@@ -737,7 +738,9 @@ def main():
             print(f"Собрано данных для t-SNE: {len(all_features)} образцов")
 
             # Визуализация с помощью t-SNE
-            tsne_path = os.path.join(args.output, "tsne_visualization.png")
+            # Добавляем временную метку к имени файла
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            tsne_path = os.path.join(args.output, f"tsne_visualization_{timestamp}.png")
             visualize_tsne(
                 all_features,
                 all_predictions,
@@ -749,7 +752,8 @@ def main():
 
 
             # Визуализация матрицы ошибок
-            cm_path = os.path.join(args.output, "confusion_matrix.png")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            cm_path = os.path.join(args.output, f"confusion_matrix_{timestamp}.png")
             visualize_confusion_matrix(
                 results['true_labels'],
                 results['predictions'],
@@ -759,7 +763,8 @@ def main():
             print(f"Матрица ошибок сохранена в {cm_path}")
 
             # Визуализация распределения классов
-            dist_path = os.path.join(args.output, "class_distribution.png")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            dist_path = os.path.join(args.output, f"class_distribution_{timestamp}.png")
             visualize_class_distribution(
                 results['true_labels'],
                 results['predictions'],
@@ -769,7 +774,8 @@ def main():
             print(f"Распределение классов сохранено в {dist_path}")
 
             # Визуализация уверенности модели
-            conf_path = os.path.join(args.output, "prediction_confidence.png")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            conf_path = os.path.join(args.output, f"prediction_confidence_{timestamp}.png")
             visualize_prediction_confidence(
                 results['predictions'],
                 results['probabilities'],
@@ -780,7 +786,8 @@ def main():
             print(f"График уверенности модели сохранен в {conf_path}")
 
             # Сохранение текстового отчета о классификации
-            report_path = os.path.join(args.output, "classification_report.txt")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            report_path = os.path.join(args.output, f"classification_report_{timestamp}.txt")
             with open(report_path, 'w') as f:
                 f.write(f"Точность модели: {results['accuracy']:.4f}\n\n")
                 f.write("Отчет о классификации:\n")
@@ -823,7 +830,8 @@ def main():
             print(f"Собрано данных для t-SNE: {len(all_features)} образцов")
 
             # Визуализация с помощью t-SNE
-            tsne_path = os.path.join(args.output, "tsne_visualization.png")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            tsne_path = os.path.join(args.output, f"tsne_visualization_{timestamp}.png")
             visualize_tsne(
                 all_features,
                 all_predictions,
@@ -849,12 +857,14 @@ def main():
                 df_results[f'Prob_{action}'] = probas[:, i]
 
             # Сохраняем предсказания в CSV
-            pred_path = os.path.join(args.output, "predictions.csv")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            pred_path = os.path.join(args.output, f"predictions_{timestamp}.csv")
             df_results.to_csv(pred_path, index=False)
             print(f"Предсказания сохранены в {pred_path}")
 
             # Визуализация распределения предсказанных классов
-            dist_path = os.path.join(args.output, "predicted_distribution.png")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            dist_path = os.path.join(args.output, f"predicted_distribution_{timestamp}.png")
             visualize_predicted_distribution(
                 results['predictions'],
                 results['target_names'], dist_path
@@ -862,7 +872,8 @@ def main():
             print(f"Распределение предсказанных классов сохранено в {dist_path}")
 
             # Визуализация уверенности модели без истинных меток
-            conf_path = os.path.join(args.output, "prediction_confidence.png")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            conf_path = os.path.join(args.output, f"prediction_confidence_{timestamp}.png")
             visualize_prediction_confidence(
                 results['predictions'],
                 results['probabilities'],

@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import classification_report, confusion_matrix
 
-def visualize_data_distribution(y_train, y_val, action_mapping):
+def visualize_data_distribution(y_train, y_val, action_mapping, timestamp=None):
+    if timestamp is None:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     """
     Визуализация распределения классов в обучающей и валидационной выборках
     
