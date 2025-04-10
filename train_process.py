@@ -191,8 +191,7 @@ def train_poker_model(file_path, output_dir=None, hidden_dim=128, num_layers=4, 
         data_dict['y_val'], 
         data_dict['action_mapping']
     )
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    class_dist_fig.savefig(os.path.join(output_dir, f'class_distribution_{timestamp}.png'))
+    class_dist_fig.savefig(os.path.join(output_dir, 'class_distribution.png'))
     plt.close(class_dist_fig)
     
     # Обучение модели с отслеживанием истории

@@ -109,11 +109,7 @@ def visualize_confusion_matrix(true_labels, predictions, action_mapping, output_
     Returns:
         matplotlib.figure.Figure: Фигура с матрицей ошибок
     """
-    # Добавляем временную метку к имени файла
-    if output_path:
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        base, ext = os.path.splitext(output_path)
-        output_path = f"{base}_{timestamp}{ext}"
+    # Remove timestamp generation for consistent filenames
     # Обратное отображение меток
     reverse_mapping = {v: k for k, v in action_mapping.items()}
     target_names = [reverse_mapping[i] for i in sorted(reverse_mapping.keys())]
@@ -144,11 +140,7 @@ def visualize_class_distribution(true_labels, predictions, target_names, output_
     """
     Визуализация распределения классов в предсказаниях и истинных метках
     """
-    # Добавляем временную метку к имени файла
-    if output_path:
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        base, ext = os.path.splitext(output_path)
-        output_path = f"{base}_{timestamp}{ext}"
+    # Remove timestamp generation for consistent filenames
 
     """
     Args:
@@ -208,11 +200,7 @@ def visualize_prediction_confidence(predictions, probabilities, true_labels, tar
     """
     Визуализация уверенности модели в предсказаниях
     """
-    # Добавляем временную метку к имени файла
-    if output_path:
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        base, ext = os.path.splitext(output_path)
-        output_path = f"{base}_{timestamp}{ext}"
+    # Remove timestamp generation for consistent filenames
 
     """
     Args:
@@ -330,10 +318,7 @@ def visualize_tsne(features, predictions, true_labels=None, output_path=None, ma
     Returns:
         matplotlib.figure.Figure: Фигура с t-SNE визуализацией
     """
-    if output_path:
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        base, ext = os.path.splitext(output_path)
-        output_path = f"{base}_{timestamp}{ext}"
+    # Remove timestamp generation for consistent filenames
     from sklearn.manifold import TSNE
     import matplotlib.pyplot as plt
     import numpy as np
