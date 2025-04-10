@@ -389,7 +389,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
         # Вычисление метрик
         accuracy = accuracy_score(y_true, y_pred)
-        report = classification_report(y_true, y_pred, output_dict=True)
+        report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
         cm = confusion_matrix(y_true, y_pred)
 
         results['accuracy'] = accuracy
@@ -401,7 +401,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
         # Формирование текстового отчета
         target_names = [reverse_mapping[i] for i in sorted(reverse_mapping.keys())]
-        text_report = classification_report(y_true, y_pred, target_names=target_names)
+        text_report = classification_report(y_true, y_pred, target_names=target_names, zero_division=0)
         print("\nОтчет о классификации:")
         print(text_report)
 
@@ -520,16 +520,16 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
             # Сохраняем отчет о классификации размеров ставок
             with open(os.path.join(output_dir, 'bet_size_classification_report.txt'), 'w') as f:
-                f.write(classification_report(y_true_sizes, y_pred_sizes))
+                f.write(classification_report(y_true_sizes, y_pred_sizes, zero_division=0))
 
             # Визуализация ROC-кривой для all-in предсказаний
             if 'allin' in output_dir:
                 df_allin = test_data['df'].copy()
                 y_true_allin = (df_allin['Allin'] == 1).astype(int)
-                
+
                 # Получаем вероятности для all-in класса
                 probs = results['probabilities'][:, 1] if len(probs.shape) > 1 else probs
-                
+
                 fpr, tpr, _ = roc_curve(y_true_allin, probs)
                 roc_auc = auc(fpr, tpr)
 
@@ -691,7 +691,8 @@ def main():
                 f.write(classification_report(
                     results['true_labels'],
                     results['predictions'],
-                    target_names=results['target_names']
+                    target_names=results['target_names'],
+                    zero_division=0
                 ))
             print(f"Отчет о классификации сохранен в {report_path}")
         else:
