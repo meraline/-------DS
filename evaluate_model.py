@@ -478,6 +478,22 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
         choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
         bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
 
+        # Создаем и сохраняем матрицу ошибок для размеров ставок
+        if all_targets:
+            plt.figure(figsize=(12, 8))
+            cm_sizes = confusion_matrix(bet_df['BetSizeCategory'], 
+                                     [choices[np.argmax(p)] for p in probas[bet_size_mask]], 
+                                     labels=choices)
+            sns.heatmap(cm_sizes, annot=True, fmt='d',
+                       xticklabels=choices,
+                       yticklabels=choices)
+            plt.title('Матрица ошибок для размеров ставок')
+            plt.xlabel('Предсказанные значения')
+            plt.ylabel('Истинные значения')
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
+            plt.close()
+
         if all_targets:
             # Получаем истинные метки размеров ставок
             y_true_sizes = bet_df['BetSizeCategory'].values
@@ -523,12 +539,12 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 f.write(classification_report(y_true_sizes, y_pred_sizes, zero_division=0))
 
             # Визуализация ROC-кривой для all-in предсказаний
-            if 'allin' in output_dir:
-                df_allin = test_data['df'].copy()
+            df_allin = test_data['df'].copy()
+            if 'Allin' in df_allin.columns:
                 y_true_allin = (df_allin['Allin'] == 1).astype(int)
 
                 # Получаем вероятности для all-in класса
-                probs = results['probabilities'][:, 1] if len(probs.shape) > 1 else probs
+                all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
 
                 fpr, tpr, _ = roc_curve(y_true_allin, probs)
                 roc_auc = auc(fpr, tpr)
