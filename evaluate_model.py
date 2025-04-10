@@ -565,7 +565,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
                 plt.ylabel('True Positive Rate')
                 plt.title('ROC-кривая для предсказания All-in')
                 plt.legend(loc="lower right")
-                plt.savefig(os.path.join(output_dir, 'allin_roc_curve.png'))
+                plt.savefig(os.path.join(output_dir + '_allin', 'allin_roc_curve.png'))
                 plt.close()
 
             # Визуализация распределения размеров ставок по категориям
