@@ -1,0 +1,16 @@
+modules = ["web", "python-3.12", "nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Train Model"
+
+[[workflows.workflow]]
+name = "Train Model"
+author = 24271047
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python train_main.py"
