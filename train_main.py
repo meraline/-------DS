@@ -49,11 +49,18 @@ if __name__ == "__main__":
     print("=" * 60)
     
     # Запуск оценки модели
-    print("\nЗапуск оценки модели...")
+    print("\n=== Этап 1: Обучение модели ===")
+    print("Обучение модели на тренировочных данных...")
+    
+    print("\n=== Этап 2: Валидация модели ===")
     from evaluate_model import main as evaluate_main
     evaluate_main([
         "--model_dir", args.output,
-        "--test", args.file,  # Используем тот же файл для тестирования
-        "--output", args.output,  # Сохраняем результаты в ту же директорию
-        "--max_rows", str(min(500000, args.max_rows))  # Ограничиваем размер тестовой выборки
+        "--test", args.file,
+        "--output", args.output,
+        "--max_rows", str(min(500000, args.max_rows))
     ])
+    
+    print("\n=== Этап 3: Генерация визуализаций ===")
+    print("Все визуализации сохранены в директории:", args.output)
+    print("Запустите 'python app.py' для просмотра результатов через веб-интерфейс")

@@ -4,7 +4,7 @@ modules = ["web", "python-3.12", "nodejs-20"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Run Visualization"
+runButton = "Full Pipeline"
 
 [[workflows.workflow]]
 name = "Train Model"
@@ -19,6 +19,19 @@ args = "python train_main.py"
 name = "Run Visualization"
 author = 24271047
 mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python app.py"
+
+[[workflows.workflow]]
+name = "Full Pipeline"
+author = 24271047
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python train_main.py --epochs 10 --max_rows 1500000"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
