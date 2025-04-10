@@ -638,9 +638,9 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
             # Перемещаем файлы из model_dir в model_dir_allin
             import shutil
-                for file in ['allin_distribution.png', 'allin_stack_distribution.png']:
-                    src = os.path.join(output_dir, file)
-                    dst = os.path.join(output_dir + '_allin', file)
+            for file in ['allin_distribution.png', 'allin_stack_distribution.png']:
+                src = os.path.join(output_dir, file)
+                dst = os.path.join(output_dir + '_allin', file)
                     if os.path.exists(src):
                         shutil.move(src, dst)
                         print(f"Перемещен файл {file} в папку {output_dir}_allin")
