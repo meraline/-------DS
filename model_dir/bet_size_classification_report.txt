@@ -1,0 +1,10 @@
+              precision    recall  f1-score   support
+
+        Huge       0.00      0.00      0.00     130.0
+       Large       0.00      0.00      0.00       0.0
+      Medium       0.00      0.00      0.00       0.0
+       Small       0.00      0.00      0.00       0.0
+
+    accuracy                           0.00     130.0
+   macro avg       0.00      0.00      0.00     130.0
+weighted avg       0.00      0.00      0.00     130.0
