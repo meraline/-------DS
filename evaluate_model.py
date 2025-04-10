@@ -521,27 +521,19 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
         choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large']
         df_bets['BetSizeCategory'] = np.select(conditions, choices, default='medium')
 
-        # Выводим статистику по категориям
-        print("\nРаспределение размеров ставок по категориям:")
-        size_stats = df_bets['BetSizeCategory'].value_counts()
-        print(size_stats)
-
-        # Создаем и сохраняем матрицу ошибок для размеров ставок
+        # Создаем и сохраняем матрицу ошибок для размеров ставок с улучшенной визуализацией
         bet_size_mask = df['Action'].isin(['Bet', 'Raise'])
         if all_targets and bet_size_mask.any():
-            # Получаем предсказания для ставок
             bet_predictions = []
             for i, prob in enumerate(probas):
                 if bet_size_mask.iloc[i]:
                     bet_predictions.append(choices[np.argmax(prob)])
 
+            # Матрица ошибок для обычных ставок
+            cm_sizes = confusion_matrix(df_bets['BetSizeCategory'].values, bet_predictions, labels=choices)
             plt.figure(figsize=(12, 8))
-            cm_sizes = confusion_matrix(bet_df['BetSizeCategory'].values, 
-                                     bet_predictions,
-                                     labels=choices)
-            sns.heatmap(cm_sizes, annot=True, fmt='d',
-                       xticklabels=choices,
-                       yticklabels=choices)
+            sns.heatmap(cm_sizes, annot=True, fmt='d', cmap='YlOrRd',
+                       xticklabels=choices, yticklabels=choices)
             plt.title('Матрица ошибок для размеров ставок')
             plt.xlabel('Предсказанные значения')
             plt.ylabel('Истинные значения')
@@ -549,145 +541,37 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
             plt.close()
 
-
-            # Получаем истинные метки размеров ставок
-            y_true_sizes = bet_df['BetSizeCategory'].values
-            # Предсказываем размеры ставок для тех же строк
-            bet_indices = df[df['Action'].isin(['Bet', 'Raise'])].index
-            y_pred_sizes = ['very_small'] * len(y_true_sizes)
-
-            # Создаем матрицу ошибок
-            cm_sizes = confusion_matrix(y_true_sizes, y_pred_sizes)
-            plt.figure(figsize=(10, 8))
-            sns.heatmap(cm_sizes, annot=True, fmt='d', xticklabels=choices, yticklabels=choices)
-            plt.title('Матрица ошибок размеров ставок')
-            plt.xlabel('Предсказанные значения')
-            plt.ylabel('Истинные значения')
-            plt.tight_layout()
-            plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
-            plt.close()
-
-            # Создаем матрицу ошибок для all-in
-            allin_mask = df['Allin'] == 1
-            y_true_allin = df[allin_mask]['BetSizeCategory'].values
-            y_pred_allin = ['very_large'] * len(y_true_allin)
-
-            cm_allin = confusion_matrix(y_true_allin, y_pred_allin)
-            plt.figure(figsize=(10, 8))
-            sns.heatmap(cm_allin, annot=True, fmt='d', xticklabels=choices, yticklabels=choices)
-            plt.title('Матрица ошибок размеров ставок All-in')
-            plt.xlabel('Предсказанные значения')
-            plt.ylabel('Истинные значения')
-            plt.tight_layout()
-            plt.savefig(os.path.join(output_dir, 'allin_bet_size_confusion_matrix.png'))
-            plt.close()
-
-            # Сохраняем отчет о классификации размеров ставок
-            with open(os.path.join(output_dir, 'bet_size_classification_report.txt'), 'w') as f:
-                f.write(classification_report(y_true_sizes, y_pred_sizes, zero_division=0))
-
-            # Визуализация ROC-кривой для all-in предсказаний
-            df_allin = test_data['df'].copy()
-            if 'Allin' in df_allin.columns:
-                from sklearn.metrics import roc_curve, auc
-                # Получаем вероятности для all-in
-                y_true_allin = df_allin['Allin'].values
-                y_pred_proba_allin = probas[:, -1]  # Вероятности для последнего класса (all-in)
-
-                # Строим ROC-кривую
-                fpr, tpr, _ = roc_curve(y_true_allin, y_pred_proba_allin)
-                roc_auc = auc(fpr, tpr)
-
-                plt.figure(figsize=(8, 6))
-                plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC кривая (AUC = {roc_auc:.2f})')
-                plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-                plt.xlim([0.0, 1.0])
-                plt.ylim([0.0, 1.05])
-                plt.xlabel('False Positive Rate')
-                plt.ylabel('True Positive Rate')
-                plt.title('ROC-кривая для предсказания All-in')
-                plt.legend(loc="lower right")
-                plt.savefig(os.path.join(output_dir + '_allin', 'allin_roc_curve.png'))
-                plt.close()
-
-            # Визуализация распределения размеров ставок по категориям
-            # Визуализация распределения размеров ставок по категориям
-            if len(df_bets) > 0:
-                plt.figure(figsize=(12, 6))
-                sns.countplot(data=df_bets, x='BetSizeCategory', order=choices)
-                plt.title('Распределение размеров ставок по категориям')
-                plt.xlabel('Категория ставки')
-                plt.ylabel('Количество')
-                plt.xticks(rotation=45)
-                plt.tight_layout()
-                plt.savefig(os.path.join(output_dir, 'bet_size_categories_distribution.png'))
-                plt.close()
-                print(f"Сохранена визуализация распределения в {output_dir}/bet_size_categories_distribution.png")
-
-            # Получаем вероятности для all-in класса
-            y_true_allin = (df_allin['Allin'] == 1).astype(int)
-            all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
-
-            fpr, tpr, _ = roc_curve(y_true_allin, all_in_probs)
-            roc_auc = auc(fpr, tpr)
-
-            plt.figure(figsize=(10, 8))
-            plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
-            plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-            plt.xlim([0.0, 1.0])
-            plt.ylim([0.0, 1.05])
-            plt.xlabel('False Positive Rate')
-            plt.ylabel('True Positive Rate')
-            plt.title('ROC Curve for All-in Predictions')
-            plt.legend(loc="lower right")
-            plt.savefig(os.path.join(output_dir, 'allin_roc_curve.png'))
-            plt.close()
-
-            # Анализ распределения all-in
-            print("\nСтатистика по all-in решениям:")
-            allin_stats = df_allin['Allin'].value_counts()
-            print(allin_stats)
-
-            # Создаем визуализацию распределения all-in
-            plt.figure(figsize=(10, 6))
-            labels = ['Не All-in', 'All-in']
-            colors = ['blue', 'red']
-            plt.bar(labels, allin_stats.values, color=colors)
-            plt.title('Распределение решений All-in')
-            plt.ylabel('Количество')
-            plt.savefig(os.path.join(output_dir + '_allin', 'allin_distribution.png'))
-            plt.close()
-
-                # Визуализация распределения размеров ставок
-            plt.figure(figsize=(12, 6))
-            bet_data = df_allin[df_allin['Action'].isin(['Bet', 'Raise'])]['Bet']
-            plt.hist(bet_data, bins=50, color='skyblue', edgecolor='black')
-            plt.title('Распределение размеров ставок')
-            plt.xlabel('Размер ставки')
-            plt.ylabel('Частота')
-            plt.savefig(os.path.join(output_dir + '_allin', 'bet_size_distribution.png'))
-            plt.close()
-
-            print("\nПримеры all-in ситуаций:")
-            allin_examples = df_allin[df_allin['Allin'] == 1][['Bet', 'Stack', 'Pot', 'Street_id']].head()
-            print(allin_examples)
-
-            # Анализ ситуаций с all-in
+            # Матрица ошибок для all-in
             allin_df = df[df['Allin'] == 1].copy()
-            plt.figure(figsize=(12, 6))
-            sns.boxplot(data=allin_df, x='Street_id', y='Stack')
-            plt.title('Распределение стеков при all-in по улицам')
-            plt.savefig(os.path.join(output_dir + '_allin', 'allin_stack_distribution.png'))
-            plt.close()
+            if len(allin_df) > 0:
+                allin_df['BetToPot'] = (allin_df['Bet'] / allin_df['Pot']) * 100
+                allin_df['BetSizeCategory'] = np.select(conditions, choices, default='very_large')
 
-            # Перемещаем файлы из model_dir в model_dir_allin
-            import shutil
-            for file in ['allin_distribution.png', 'allin_stack_distribution.png']:
-                src = os.path.join(output_dir, file)
-                dst = os.path.join(output_dir + '_allin', file)
-                if os.path.exists(src):
-                    shutil.move(src, dst)
-                    print(f"Перемещен файл {file} в папку {output_dir}_allin")
+                allin_predictions = ['very_large'] * len(allin_df)
+                cm_allin = confusion_matrix(allin_df['BetSizeCategory'].values, 
+                                         allin_predictions,
+                                         labels=choices)
+
+                plt.figure(figsize=(12, 8))
+                sns.heatmap(cm_allin, annot=True, fmt='d', cmap='YlOrRd',
+                           xticklabels=choices, yticklabels=choices)
+                plt.title('Матрица ошибок размеров ставок All-in')
+                plt.xlabel('Предсказанные значения')
+                plt.ylabel('Истинные значения')
+                plt.tight_layout()
+                plt.savefig(os.path.join(output_dir, 'allin_bet_size_confusion_matrix.png'))
+                plt.close()
+
+            # Визуализация распределения ставок
+            plt.figure(figsize=(12, 6))
+            sns.countplot(data=df_bets, x='BetSizeCategory', order=choices, palette='viridis')
+            plt.title('Распределение размеров ставок')
+            plt.xlabel('Категория ставки')
+            plt.ylabel('Количество')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_dir, 'bet_size_distribution.png'))
+            plt.close()
 
         # Displaying all features in a table
         if all_targets:
@@ -816,7 +700,7 @@ def main():
             )
             print(f"График уверенности модели сохранен в {conf_path}")
 
-            # Сохранение текстового отчета о классификации
+            #Сохранение текстового отчета о классификации
             report_path = os.path.join(args.output, "classification_report.txt")
             with open(report_path, 'w') as f:
                 f.write(f"Точность модели: {results['accuracy']:.4f}\n\n")
