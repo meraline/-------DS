@@ -584,10 +584,10 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
             y_true_allin = (df_allin['Allin'] == 1).astype(int)
             all_in_probs = probas[:, 1] if len(probas.shape) > 1 else probas
 
-                fpr, tpr, _ = roc_curve(y_true_allin, all_in_probs)
-                roc_auc = auc(fpr, tpr)
+            fpr, tpr, _ = roc_curve(y_true_allin, all_in_probs)
+            roc_auc = auc(fpr, tpr)
 
-                plt.figure(figsize=(10, 8))
+            plt.figure(figsize=(10, 8))
                 plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
                 plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
                 plt.xlim([0.0, 1.0])
