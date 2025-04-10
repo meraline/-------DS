@@ -10,11 +10,13 @@ def train_size_model(file_path, output_dir="./size_model_dir", **kwargs):
     """Обучение модели размеров ставок"""
     print("=== Запуск обучения модели RWKV для предсказания размеров ставок ===")
     
+    # Убираем неподдерживаемый параметр из kwargs
+    kwargs.pop('data_preparation_fn', None)
+    
     # Подготавливаем данные
     result = train_poker_model(
         file_path=file_path,
         output_dir=output_dir,
-        data_preparation_fn=prepare_bet_size_data,
         **kwargs
     )
     

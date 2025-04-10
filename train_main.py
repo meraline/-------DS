@@ -2,6 +2,8 @@
 train_main.py - Главный файл для запуска процесса обучения модели RWKV
 """
 import sys
+import warnings
+warnings.filterwarnings('ignore', category=RuntimeWarning, message='Mean of empty slice')
 from train_process import train_poker_model
 
 if __name__ == "__main__":
