@@ -1,4 +1,5 @@
 from flask import Flask, render_template_string, send_file
+import pandas as pd
 import os
 
 def get_latest_file(prefix, directory):
@@ -237,18 +238,72 @@ def serve_plot_allin(filename):
 
 @app.route('/plot/feature_table.html')
 def serve_feature_table():
-    df = pd.read_csv('model_dir/feature_table.csv').head(10)
-    return df.to_html(classes='table table-striped', index=False)
+    try:
+        df = pd.read_csv('model_dir/feature_table.csv').head(10)
+        html = '''
+        <html>
+        <head>
+            <style>
+                .table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .table th, .table td { padding: 12px 15px; border: 1px solid #ddd; }
+                .table thead { background-color: #f3f3f3; }
+                .table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
+            </style>
+        </head>
+        <body>
+        ''' + df.to_html(classes='table', index=False) + '''
+        </body>
+        </html>
+        '''
+        return html
+    except Exception as e:
+        return f"Error loading feature table: {str(e)}", 500
 
 @app.route('/plot/feature_table_size.html')
 def serve_feature_table_size():
-    df = pd.read_csv('model_dir_size/feature_table.csv').head(10)
-    return df.to_html(classes='table table-striped', index=False)
+    try:
+        df = pd.read_csv('model_dir_size/feature_table.csv').head(10)
+        html = '''
+        <html>
+        <head>
+            <style>
+                .table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .table th, .table td { padding: 12px 15px; border: 1px solid #ddd; }
+                .table thead { background-color: #f3f3f3; }
+                .table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
+            </style>
+        </head>
+        <body>
+        ''' + df.to_html(classes='table', index=False) + '''
+        </body>
+        </html>
+        '''
+        return html
+    except Exception as e:
+        return f"Error loading feature table: {str(e)}", 500
 
 @app.route('/plot/feature_table_allin.html')
 def serve_feature_table_allin():
-    df = pd.read_csv('model_dir_allin/feature_table.csv').head(10)
-    return df.to_html(classes='table table-striped', index=False)
+    try:
+        df = pd.read_csv('model_dir_allin/feature_table.csv').head(10)
+        html = '''
+        <html>
+        <head>
+            <style>
+                .table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .table th, .table td { padding: 12px 15px; border: 1px solid #ddd; }
+                .table thead { background-color: #f3f3f3; }
+                .table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
+            </style>
+        </head>
+        <body>
+        ''' + df.to_html(classes='table', index=False) + '''
+        </body>
+        </html>
+        '''
+        return html
+    except Exception as e:
+        return f"Error loading feature table: {str(e)}", 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
