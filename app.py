@@ -112,6 +112,11 @@ HTML_TEMPLATE = '''
         </div>
         
         <div class="image-container">
+            <h2>Матрица ошибок по размерам ставок</h2>
+            <img src="/plot/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок">
+        </div>
+        
+        <div class="image-container">
             <h2>Распределение классов</h2>
             <img src="/plot/size_class_distribution.png" alt="Распределение классов">
         </div>

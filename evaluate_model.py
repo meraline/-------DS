@@ -452,8 +452,21 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir):
         bet_df['BetSizeCategory'] = pd.cut(bet_df['Bet'], bins=[-np.inf, 0.25, 0.5, 0.75, np.inf], labels=['Small', 'Medium', 'Large', 'Huge'])
 
         if all_targets:
-            y_true_sizes = bet_df['BetSizeCategory']
-            y_pred_sizes = pd.cut(probas.argmax(axis=1), bins=[-np.inf, 0.25, 0.5, 0.75, np.inf], labels=['Small', 'Medium', 'Large', 'Huge'])
+            # Получаем истинные метки размеров ставок
+            y_true_sizes = bet_df['BetSizeCategory'].values
+            
+            # Предсказываем размеры ставок для тех же строк
+            bet_indices = df[bet_size_mask].index
+            y_pred_sizes = []
+            
+            for i, prob in enumerate(probas):
+                if i in bet_indices:
+                    if prob[0] > 0.75:
+                        y_pred_sizes.append('Large')
+                    elif prob[0] > 0.5:
+                        y_pred_sizes.append('Medium')
+                    else:
+                        y_pred_sizes.append('Small')
 
 
             plt.figure(figsize=(10, 8))
