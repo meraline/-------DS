@@ -4,6 +4,7 @@ train_process.py - Функции для обучения модели RWKV на
 import os
 import datetime
 import pickle
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
