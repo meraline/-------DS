@@ -155,7 +155,12 @@ HTML_TEMPLATE = '''
 
         <div class="image-container">
             <h2>Матрица ошибок размеров ставок All-in</h2>
-            <img src="/plot_allin/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок All-in">
+            <img src="/plot_allin/allin_bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок All-in">
+        </div>
+        
+        <div class="image-container">
+            <h2>Матрица ошибок размеров ставок</h2>
+            <img src="/plot_allin/bet_size_confusion_matrix.png" alt="Матрица ошибок размеров ставок">
         </div>
     </div>
 

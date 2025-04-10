@@ -391,19 +391,19 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
         # Расширенные метрики оценки
         from sklearn.metrics import precision_recall_fscore_support, roc_auc_score
-        
+
         # Базовые метрики
         accuracy = accuracy_score(y_true, y_pred)
         report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
         cm = confusion_matrix(y_true, y_pred)
-        
+
         # Дополнительные метрики
         precision, recall, f1, _ = precision_recall_fscore_support(y_true, y_pred, average='weighted')
-        
+
         # ROC AUC для мультиклассовой классификации
         y_prob = probas
         roc_auc = roc_auc_score(y_true, y_prob, multi_class='ovr')
-        
+
         print(f"\nРасширенные метрики:")
         print(f"Precision: {precision:.4f}")
         print(f"Recall: {recall:.4f}")
@@ -425,7 +425,7 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
     # Дополнительные визуализации для модели размеров ставок
     df = test_data['df'] # Accessing df from test_data
-    
+
     # Создаем bet_df здесь, чтобы он был доступен во всей функции
     bet_df = df[df['Action'].isin(['Bet', 'Raise'])].copy()
     if len(bet_df) > 0:
@@ -552,41 +552,34 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
             # Получаем истинные метки размеров ставок
             y_true_sizes = bet_df['BetSizeCategory'].values
-
             # Предсказываем размеры ставок для тех же строк
-            bet_indices = df[bet_size_mask].index
-            y_pred_sizes = ['very_small'] * len(y_true_sizes)  # Дефолтное значение
+            bet_indices = df[df['Action'].isin(['Bet', 'Raise'])].index
+            y_pred_sizes = ['very_small'] * len(y_true_sizes)
 
-            for i, prob in enumerate(probas):
-                if i in bet_indices:
-                    bet_idx = list(bet_indices).index(i)
-                    predicted_class = np.argmax(prob)
-                    y_pred_sizes[bet_idx] = choices[predicted_class]
-
-            # Создаем матрицу ошибок для размеров ставок
+            # Создаем матрицу ошибок
+            cm_sizes = confusion_matrix(y_true_sizes, y_pred_sizes)
             plt.figure(figsize=(10, 8))
-            cm_sizes = confusion_matrix(y_true_sizes, y_pred_sizes, labels=choices)
-            sns.heatmap(cm_sizes, annot=True, fmt='d',
-                       xticklabels=choices,
-                       yticklabels=choices)
-            plt.title('Матрица ошибок для размеров ставок')
+            sns.heatmap(cm_sizes, annot=True, fmt='d', xticklabels=choices, yticklabels=choices)
+            plt.title('Матрица ошибок размеров ставок')
             plt.xlabel('Предсказанные значения')
             plt.ylabel('Истинные значения')
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
             plt.close()
 
+            # Создаем матрицу ошибок для all-in
+            allin_mask = df['Allin'] == 1
+            y_true_allin = df[allin_mask]['BetSizeCategory'].values
+            y_pred_allin = ['very_large'] * len(y_true_allin)
 
+            cm_allin = confusion_matrix(y_true_allin, y_pred_allin)
             plt.figure(figsize=(10, 8))
-            sns.heatmap(confusion_matrix(y_true_sizes, y_pred_sizes),
-                       annot=True, fmt='d',
-                       xticklabels=np.unique(y_true_sizes),
-                       yticklabels=np.unique(y_true_sizes))
-            plt.title('Матрица ошибок для размеров ставок')
+            sns.heatmap(cm_allin, annot=True, fmt='d', xticklabels=choices, yticklabels=choices)
+            plt.title('Матрица ошибок размеров ставок All-in')
             plt.xlabel('Предсказанные значения')
             plt.ylabel('Истинные значения')
             plt.tight_layout()
-            plt.savefig(os.path.join(output_dir, 'bet_size_confusion_matrix.png'))
+            plt.savefig(os.path.join(output_dir, 'allin_bet_size_confusion_matrix.png'))
             plt.close()
 
             # Сохраняем отчет о классификации размеров ставок
