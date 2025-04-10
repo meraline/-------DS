@@ -448,16 +448,19 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
     bet_size_mask = df['Action'].isin(['Bet', 'Raise'])
     if bet_size_mask.any():
         bet_df = df[bet_size_mask].copy()
-        # Категоризация ставок относительно банка
-        bet_df['BetToPot'] = bet_df['Bet'] / bet_df['Pot']
+        # Категоризация ставок относительно банка (в процентах)
+        bet_df['BetToPot'] = (bet_df['Bet'] / bet_df['Pot']) * 100
         conditions = [
-            (bet_df['BetToPot'] <= 0.33),
-            (bet_df['BetToPot'] <= 0.66) & (bet_df['BetToPot'] > 0.33),
-            (bet_df['BetToPot'] <= 1.0) & (bet_df['BetToPot'] > 0.66),
-            (bet_df['BetToPot'] > 1.0)
+            (bet_df['BetToPot'] < 26),
+            (bet_df['BetToPot'] >= 26) & (bet_df['BetToPot'] < 44),
+            (bet_df['BetToPot'] >= 44) & (bet_df['BetToPot'] < 58),
+            (bet_df['BetToPot'] >= 58) & (bet_df['BetToPot'] < 78),
+            (bet_df['BetToPot'] >= 78) & (bet_df['BetToPot'] < 92),
+            (bet_df['BetToPot'] >= 92) & (bet_df['BetToPot'] < 200),
+            (bet_df['BetToPot'] >= 200) | (bet_df['Allin'] == 1)
         ]
-        choices = ['Small', 'Medium', 'Large', 'Huge']
-        bet_df['BetSizeCategory'] = np.select(conditions, choices, default='Medium')
+        choices = ['very_small', 'small', 'medium', 'medium_large', 'large', 'very_large', 'all-in']
+        bet_df['BetSizeCategory'] = np.select(conditions, choices, default='medium')
 
         if all_targets:
             # Получаем истинные метки размеров ставок
@@ -465,24 +468,20 @@ def evaluate_model(model, test_loader, action_mapping, device, output_dir, test_
 
             # Предсказываем размеры ставок для тех же строк
             bet_indices = df[bet_size_mask].index
-            y_pred_sizes = ['Small'] * len(y_true_sizes)  # Дефолтное значение
+            y_pred_sizes = ['very_small'] * len(y_true_sizes)  # Дефолтное значение
 
             for i, prob in enumerate(probas):
                 if i in bet_indices:
                     bet_idx = list(bet_indices).index(i)
-                    if prob[0] > 0.75:
-                        y_pred_sizes[bet_idx] = 'Large'
-                    elif prob[0] > 0.5:
-                        y_pred_sizes[bet_idx] = 'Medium'
-                    else:
-                        y_pred_sizes[bet_idx] = 'Small'
+                    predicted_class = np.argmax(prob)
+                    y_pred_sizes[bet_idx] = choices[predicted_class]
 
             # Создаем матрицу ошибок для размеров ставок
             plt.figure(figsize=(10, 8))
-            cm_sizes = confusion_matrix(y_true_sizes, y_pred_sizes, labels=['Small', 'Medium', 'Large', 'Huge'])
+            cm_sizes = confusion_matrix(y_true_sizes, y_pred_sizes, labels=choices)
             sns.heatmap(cm_sizes, annot=True, fmt='d',
-                       xticklabels=['Small', 'Medium', 'Large', 'Huge'],
-                       yticklabels=['Small', 'Medium', 'Large', 'Huge'])
+                       xticklabels=choices,
+                       yticklabels=choices)
             plt.title('Матрица ошибок для размеров ставок')
             plt.xlabel('Предсказанные значения')
             plt.ylabel('Истинные значения')
