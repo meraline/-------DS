@@ -360,7 +360,7 @@ def visualize_tsne(features, predictions, true_labels=None, output_path=None, ma
     tsne = TSNE(
         n_components=2,
         perplexity=min(30, len(features_subset) - 1),  # perplexity должна быть меньше размера данных
-        n_iter=1000,
+        max_iter=1000,
         random_state=42,
         init='pca'
     )
